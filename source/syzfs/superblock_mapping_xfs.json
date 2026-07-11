@@ -1,0 +1,1566 @@
+{
+  "meta": {
+    "description": "Superblock field mapping for xfs: kernel (6.12) → mkfs.xfs (xfsprogs 6.12) → ConfD mkfs_xfs_constraints",
+    "struct_mkfs": "struct mkfs_params + struct sb_feat_args (mkfs in-memory config)",
+    "struct_disk": "struct xfs_dsb (on-disk, big-endian, 512 bytes)",
+    "struct_mem": "struct xfs_sb (kernel in-memory, host-endian)",
+    "struct_mount": "struct xfs_mount (kernel in-memory mount)",
+    "sources": {
+      "kernel_xfs_format_h": "fssourcecode612/xfs/libxfs/xfs_format.h:95 (struct xfs_sb), :184 (struct xfs_dsb)",
+      "kernel_xfs_mount_h": "fssourcecode612/xfs/xfs_mount.h:83",
+      "kernel_xfs_sb_c": "fssourcecode612/xfs/libxfs/xfs_sb.c (__xfs_sb_from_disk, xfs_sb_quota_from_disk)",
+      "kernel_xfs_mount_c": "fssourcecode612/xfs/xfs_mount.c (xfs_mount_validate_sb)",
+      "confd_constraints": "ConfD-core/Taint_Analyzer/mkfs_xfs_constraints.json"
+    }
+  },
+  "superblock_field_layout": [
+    {
+      "offset_hex": "0x0",
+      "offset_dec": 0,
+      "size": 4,
+      "kernel_name": "sb_magicnum",
+      "kernel_type": "__be32",
+      "doc": "Magic number (XFS_SB_MAGIC = 0x58465342 'XFSB')"
+    },
+    {
+      "offset_hex": "0x4",
+      "offset_dec": 4,
+      "size": 4,
+      "kernel_name": "sb_blocksize",
+      "kernel_type": "__be32",
+      "doc": "Block size in bytes"
+    },
+    {
+      "offset_hex": "0x8",
+      "offset_dec": 8,
+      "size": 8,
+      "kernel_name": "sb_dblocks",
+      "kernel_type": "__be64",
+      "doc": "Number of data blocks"
+    },
+    {
+      "offset_hex": "0x10",
+      "offset_dec": 16,
+      "size": 8,
+      "kernel_name": "sb_rblocks",
+      "kernel_type": "__be64",
+      "doc": "Number of realtime blocks"
+    },
+    {
+      "offset_hex": "0x18",
+      "offset_dec": 24,
+      "size": 8,
+      "kernel_name": "sb_rextents",
+      "kernel_type": "__be64",
+      "doc": "Number of realtime extents"
+    },
+    {
+      "offset_hex": "0x20",
+      "offset_dec": 32,
+      "size": 16,
+      "kernel_name": "sb_uuid",
+      "kernel_type": "uuid_t",
+      "doc": "UUID (16 bytes)"
+    },
+    {
+      "offset_hex": "0x30",
+      "offset_dec": 48,
+      "size": 8,
+      "kernel_name": "sb_logstart",
+      "kernel_type": "__be64",
+      "doc": "Starting block of internal log"
+    },
+    {
+      "offset_hex": "0x38",
+      "offset_dec": 56,
+      "size": 8,
+      "kernel_name": "sb_rootino",
+      "kernel_type": "__be64",
+      "doc": "Root inode number"
+    },
+    {
+      "offset_hex": "0x40",
+      "offset_dec": 64,
+      "size": 8,
+      "kernel_name": "sb_rbmino",
+      "kernel_type": "__be64",
+      "doc": "Bitmap inode for realtime extents"
+    },
+    {
+      "offset_hex": "0x48",
+      "offset_dec": 72,
+      "size": 8,
+      "kernel_name": "sb_rsumino",
+      "kernel_type": "__be64",
+      "doc": "Summary inode for realtime bitmap"
+    },
+    {
+      "offset_hex": "0x50",
+      "offset_dec": 80,
+      "size": 4,
+      "kernel_name": "sb_rextsize",
+      "kernel_type": "__be32",
+      "doc": "Realtime extent size in blocks"
+    },
+    {
+      "offset_hex": "0x54",
+      "offset_dec": 84,
+      "size": 4,
+      "kernel_name": "sb_agblocks",
+      "kernel_type": "__be32",
+      "doc": "Size of AG in blocks"
+    },
+    {
+      "offset_hex": "0x58",
+      "offset_dec": 88,
+      "size": 4,
+      "kernel_name": "sb_agcount",
+      "kernel_type": "__be32",
+      "doc": "Number of AGs"
+    },
+    {
+      "offset_hex": "0x5C",
+      "offset_dec": 92,
+      "size": 4,
+      "kernel_name": "sb_rbmblocks",
+      "kernel_type": "__be32",
+      "doc": "Number of realtime bitmap blocks"
+    },
+    {
+      "offset_hex": "0x60",
+      "offset_dec": 96,
+      "size": 4,
+      "kernel_name": "sb_logblocks",
+      "kernel_type": "__be32",
+      "doc": "Number of log blocks"
+    },
+    {
+      "offset_hex": "0x64",
+      "offset_dec": 100,
+      "size": 2,
+      "kernel_name": "sb_versionnum",
+      "kernel_type": "__be16",
+      "doc": "Header version + feature flags"
+    },
+    {
+      "offset_hex": "0x66",
+      "offset_dec": 102,
+      "size": 2,
+      "kernel_name": "sb_sectsize",
+      "kernel_type": "__be16",
+      "doc": "Sector size in bytes"
+    },
+    {
+      "offset_hex": "0x68",
+      "offset_dec": 104,
+      "size": 2,
+      "kernel_name": "sb_inodesize",
+      "kernel_type": "__be16",
+      "doc": "Inode size in bytes"
+    },
+    {
+      "offset_hex": "0x6A",
+      "offset_dec": 106,
+      "size": 2,
+      "kernel_name": "sb_inopblock",
+      "kernel_type": "__be16",
+      "doc": "Inodes per block"
+    },
+    {
+      "offset_hex": "0x6C",
+      "offset_dec": 108,
+      "size": 12,
+      "kernel_name": "sb_fname",
+      "kernel_type": "char[12]",
+      "doc": "Filesystem name"
+    },
+    {
+      "offset_hex": "0x78",
+      "offset_dec": 120,
+      "size": 1,
+      "kernel_name": "sb_blocklog",
+      "kernel_type": "__u8",
+      "doc": "log2(blocksize)"
+    },
+    {
+      "offset_hex": "0x79",
+      "offset_dec": 121,
+      "size": 1,
+      "kernel_name": "sb_sectlog",
+      "kernel_type": "__u8",
+      "doc": "log2(sectsize)"
+    },
+    {
+      "offset_hex": "0x7A",
+      "offset_dec": 122,
+      "size": 1,
+      "kernel_name": "sb_inodelog",
+      "kernel_type": "__u8",
+      "doc": "log2(inodesize)"
+    },
+    {
+      "offset_hex": "0x7B",
+      "offset_dec": 123,
+      "size": 1,
+      "kernel_name": "sb_inopblog",
+      "kernel_type": "__u8",
+      "doc": "log2(inopblock)"
+    },
+    {
+      "offset_hex": "0x7C",
+      "offset_dec": 124,
+      "size": 1,
+      "kernel_name": "sb_agblklog",
+      "kernel_type": "__u8",
+      "doc": "log2(agblocks)"
+    },
+    {
+      "offset_hex": "0x7D",
+      "offset_dec": 125,
+      "size": 1,
+      "kernel_name": "sb_rextslog",
+      "kernel_type": "__u8",
+      "doc": "log2(rextsize)"
+    },
+    {
+      "offset_hex": "0x7E",
+      "offset_dec": 126,
+      "size": 1,
+      "kernel_name": "sb_inprogress",
+      "kernel_type": "__u8",
+      "doc": "In-progress mkfs flag"
+    },
+    {
+      "offset_hex": "0x7F",
+      "offset_dec": 127,
+      "size": 1,
+      "kernel_name": "sb_imax_pct",
+      "kernel_type": "__u8",
+      "doc": "Max % of fs for inodes"
+    },
+    {
+      "offset_hex": "0x80",
+      "offset_dec": 128,
+      "size": 8,
+      "kernel_name": "sb_icount",
+      "kernel_type": "__be64",
+      "doc": "Allocated inodes"
+    },
+    {
+      "offset_hex": "0x88",
+      "offset_dec": 136,
+      "size": 8,
+      "kernel_name": "sb_ifree",
+      "kernel_type": "__be64",
+      "doc": "Free inodes"
+    },
+    {
+      "offset_hex": "0x90",
+      "offset_dec": 144,
+      "size": 8,
+      "kernel_name": "sb_fdblocks",
+      "kernel_type": "__be64",
+      "doc": "Free data blocks"
+    },
+    {
+      "offset_hex": "0x98",
+      "offset_dec": 152,
+      "size": 8,
+      "kernel_name": "sb_frextents",
+      "kernel_type": "__be64",
+      "doc": "Free realtime extents"
+    },
+    {
+      "offset_hex": "0xA0",
+      "offset_dec": 160,
+      "size": 8,
+      "kernel_name": "sb_uquotino",
+      "kernel_type": "__be64",
+      "doc": "User quota inode"
+    },
+    {
+      "offset_hex": "0xA8",
+      "offset_dec": 168,
+      "size": 8,
+      "kernel_name": "sb_gquotino",
+      "kernel_type": "__be64",
+      "doc": "Group quota inode"
+    },
+    {
+      "offset_hex": "0xB0",
+      "offset_dec": 176,
+      "size": 2,
+      "kernel_name": "sb_qflags",
+      "kernel_type": "__be16",
+      "doc": "Quota flags"
+    },
+    {
+      "offset_hex": "0xB2",
+      "offset_dec": 178,
+      "size": 1,
+      "kernel_name": "sb_flags",
+      "kernel_type": "__u8",
+      "doc": "Misc. flags"
+    },
+    {
+      "offset_hex": "0xB3",
+      "offset_dec": 179,
+      "size": 1,
+      "kernel_name": "sb_shared_vn",
+      "kernel_type": "__u8",
+      "doc": "Shared version number"
+    },
+    {
+      "offset_hex": "0xB4",
+      "offset_dec": 180,
+      "size": 4,
+      "kernel_name": "sb_inoalignmt",
+      "kernel_type": "__be32",
+      "doc": "Inode alignment"
+    },
+    {
+      "offset_hex": "0xB8",
+      "offset_dec": 184,
+      "size": 4,
+      "kernel_name": "sb_unit",
+      "kernel_type": "__be32",
+      "doc": "Stripe or raid6 width"
+    },
+    {
+      "offset_hex": "0xBC",
+      "offset_dec": 188,
+      "size": 4,
+      "kernel_name": "sb_width",
+      "kernel_type": "__be32",
+      "doc": "Data stripe width"
+    },
+    {
+      "offset_hex": "0xC0",
+      "offset_dec": 192,
+      "size": 1,
+      "kernel_name": "sb_dirblklog",
+      "kernel_type": "__u8",
+      "doc": "log2(directory block size)"
+    },
+    {
+      "offset_hex": "0xC1",
+      "offset_dec": 193,
+      "size": 1,
+      "kernel_name": "sb_logsectlog",
+      "kernel_type": "__u8",
+      "doc": "log2(log sector size)"
+    },
+    {
+      "offset_hex": "0xC2",
+      "offset_dec": 194,
+      "size": 2,
+      "kernel_name": "sb_logsectsize",
+      "kernel_type": "__be16",
+      "doc": "Log sector size"
+    },
+    {
+      "offset_hex": "0xC4",
+      "offset_dec": 196,
+      "size": 4,
+      "kernel_name": "sb_logsunit",
+      "kernel_type": "__be32",
+      "doc": "Stripe unit for log"
+    },
+    {
+      "offset_hex": "0xC8",
+      "offset_dec": 200,
+      "size": 4,
+      "kernel_name": "sb_features2",
+      "kernel_type": "__be32",
+      "doc": "Additional features bitmask"
+    },
+    {
+      "offset_hex": "0xCC",
+      "offset_dec": 204,
+      "size": 4,
+      "kernel_name": "sb_bad_features2",
+      "kernel_type": "__be32",
+      "doc": "Bad features bitmask"
+    },
+    {
+      "offset_hex": "0xD0",
+      "offset_dec": 208,
+      "size": 4,
+      "kernel_name": "sb_features_compat",
+      "kernel_type": "__be32",
+      "doc": "Compatible features bitmask"
+    },
+    {
+      "offset_hex": "0xD4",
+      "offset_dec": 212,
+      "size": 4,
+      "kernel_name": "sb_features_ro_compat",
+      "kernel_type": "__be32",
+      "doc": "Readonly-compatible features"
+    },
+    {
+      "offset_hex": "0xD8",
+      "offset_dec": 216,
+      "size": 4,
+      "kernel_name": "sb_features_incompat",
+      "kernel_type": "__be32",
+      "doc": "Incompatible features"
+    },
+    {
+      "offset_hex": "0xDC",
+      "offset_dec": 220,
+      "size": 4,
+      "kernel_name": "sb_features_log_incompat",
+      "kernel_type": "__be32",
+      "doc": "Log-incompatible features"
+    },
+    {
+      "offset_hex": "0xE0",
+      "offset_dec": 224,
+      "size": 4,
+      "kernel_name": "sb_spino_align",
+      "kernel_type": "__be32",
+      "doc": "Sparse inode alignment"
+    },
+    {
+      "offset_hex": "0xE4",
+      "offset_dec": 228,
+      "size": 8,
+      "kernel_name": "sb_pquotino",
+      "kernel_type": "__be64",
+      "doc": "Project quota inode"
+    },
+    {
+      "offset_hex": "0xEC",
+      "offset_dec": 236,
+      "size": 8,
+      "kernel_name": "sb_lsn",
+      "kernel_type": "__be64",
+      "doc": "Log sequence number"
+    },
+    {
+      "offset_hex": "0xF4",
+      "offset_dec": 244,
+      "size": 16,
+      "kernel_name": "sb_meta_uuid",
+      "kernel_type": "uuid_t",
+      "doc": "Metadata UUID (V5 only)"
+    },
+    {
+      "offset_hex": "0x104",
+      "offset_dec": 260,
+      "size": 4,
+      "kernel_name": "sb_crc",
+      "kernel_type": "__be32",
+      "doc": "Superblock CRC (V5 only, not copied to in-memory)"
+    }
+  ],
+  "feature_bitmask_mapping": [
+    {
+      "category": "VERSIONNUM",
+      "disk_field": "sb_versionnum",
+      "bitmask_hex": "0x0010",
+      "bitmask_value": 16,
+      "kernel_func": "xfs_sb_version_hasattr",
+      "macro_name": "XFS_SB_VERSION_ATTRBIT"
+    },
+    {
+      "category": "VERSIONNUM",
+      "disk_field": "sb_versionnum",
+      "bitmask_hex": "0x0400",
+      "bitmask_value": 1024,
+      "kernel_func": "xfs_sb_version_haslogv2",
+      "macro_name": "XFS_SB_VERSION_LOGV2BIT"
+    },
+    {
+      "category": "VERSIONNUM",
+      "disk_field": "sb_versionnum",
+      "bitmask_hex": "0x1000",
+      "bitmask_value": 4096,
+      "kernel_func": "xfs_sb_version_hasextflgbit",
+      "macro_name": "XFS_SB_VERSION_EXTFLGBIT"
+    },
+    {
+      "category": "VERSIONNUM",
+      "disk_field": "sb_versionnum",
+      "bitmask_hex": "0x2000",
+      "bitmask_value": 8192,
+      "kernel_func": "xfs_sb_version_hasdirv2",
+      "macro_name": "XFS_SB_VERSION_DIRV2BIT"
+    },
+    {
+      "category": "VERSIONNUM",
+      "disk_field": "sb_versionnum",
+      "bitmask_hex": "0x4000",
+      "bitmask_value": 16384,
+      "kernel_func": "xfs_sb_version_hasborgbit",
+      "macro_name": "XFS_SB_VERSION_BORGBIT"
+    },
+    {
+      "category": "VERSIONNUM",
+      "disk_field": "sb_versionnum",
+      "bitmask_hex": "0x8000",
+      "bitmask_value": 32768,
+      "kernel_func": "xfs_sb_version_hasmorebits",
+      "macro_name": "XFS_SB_VERSION_MOREBITSBIT"
+    },
+    {
+      "category": "FEATURES2",
+      "disk_field": "sb_features2",
+      "bitmask_hex": "0x0002",
+      "bitmask_value": 2,
+      "kernel_func": "xfs_sb_version_haslazysbcount",
+      "macro_name": "XFS_SB_VERSION2_LAZYSBCOUNTBIT"
+    },
+    {
+      "category": "FEATURES2",
+      "disk_field": "sb_features2",
+      "bitmask_hex": "0x0008",
+      "bitmask_value": 8,
+      "kernel_func": "xfs_sb_version_hasattr2",
+      "macro_name": "XFS_SB_VERSION2_ATTR2BIT"
+    },
+    {
+      "category": "FEATURES2",
+      "disk_field": "sb_features2",
+      "bitmask_hex": "0x0010",
+      "bitmask_value": 16,
+      "kernel_func": "xfs_sb_version_hasprojid32",
+      "macro_name": "XFS_SB_VERSION2_PROJID32BIT"
+    },
+    {
+      "category": "FEATURES2",
+      "disk_field": "sb_features2",
+      "bitmask_hex": "0x0100",
+      "bitmask_value": 256,
+      "kernel_func": "xfs_sb_version_hascrc",
+      "macro_name": "XFS_SB_VERSION2_CRCBIT",
+      "note": "Enables V5 superblock format"
+    },
+    {
+      "category": "RO_COMPAT",
+      "disk_field": "sb_features_ro_compat",
+      "bitmask_hex": "0x0001",
+      "bitmask_value": 1,
+      "kernel_func": "xfs_sb_has_ro_compat_feature(FINOBT)",
+      "macro_name": "XFS_SB_FEAT_RO_COMPAT_FINOBT"
+    },
+    {
+      "category": "RO_COMPAT",
+      "disk_field": "sb_features_ro_compat",
+      "bitmask_hex": "0x0002",
+      "bitmask_value": 2,
+      "kernel_func": "xfs_sb_has_ro_compat_feature(RMAPBT)",
+      "macro_name": "XFS_SB_FEAT_RO_COMPAT_RMAPBT"
+    },
+    {
+      "category": "RO_COMPAT",
+      "disk_field": "sb_features_ro_compat",
+      "bitmask_hex": "0x0004",
+      "bitmask_value": 4,
+      "kernel_func": "xfs_sb_has_ro_compat_feature(REFLINK)",
+      "macro_name": "XFS_SB_FEAT_RO_COMPAT_REFLINK"
+    },
+    {
+      "category": "RO_COMPAT",
+      "disk_field": "sb_features_ro_compat",
+      "bitmask_hex": "0x0008",
+      "bitmask_value": 8,
+      "kernel_func": "xfs_sb_has_ro_compat_feature(INOBTCNT)",
+      "macro_name": "XFS_SB_FEAT_RO_COMPAT_INOBTCNT"
+    },
+    {
+      "category": "INCOMPAT",
+      "disk_field": "sb_features_incompat",
+      "bitmask_hex": "0x0001",
+      "bitmask_value": 1,
+      "kernel_func": "xfs_sb_has_incompat_feature(FTYPE)",
+      "macro_name": "XFS_SB_FEAT_INCOMPAT_FTYPE",
+      "note": "V5 default"
+    },
+    {
+      "category": "INCOMPAT",
+      "disk_field": "sb_features_incompat",
+      "bitmask_hex": "0x0002",
+      "bitmask_value": 2,
+      "kernel_func": "xfs_sb_has_incompat_feature(SPINODES)",
+      "macro_name": "XFS_SB_FEAT_INCOMPAT_SPINODES"
+    },
+    {
+      "category": "INCOMPAT",
+      "disk_field": "sb_features_incompat",
+      "bitmask_hex": "0x0004",
+      "bitmask_value": 4,
+      "kernel_func": "xfs_sb_has_incompat_feature(META_UUID)",
+      "macro_name": "XFS_SB_FEAT_INCOMPAT_META_UUID"
+    },
+    {
+      "category": "INCOMPAT",
+      "disk_field": "sb_features_incompat",
+      "bitmask_hex": "0x0008",
+      "bitmask_value": 8,
+      "kernel_func": "xfs_sb_has_incompat_feature(BIGTIME)",
+      "macro_name": "XFS_SB_FEAT_INCOMPAT_BIGTIME"
+    },
+    {
+      "category": "INCOMPAT",
+      "disk_field": "sb_features_incompat",
+      "bitmask_hex": "0x0020",
+      "bitmask_value": 32,
+      "kernel_func": "xfs_sb_has_incompat_feature(NREXT64)",
+      "macro_name": "XFS_SB_FEAT_INCOMPAT_NREXT64"
+    },
+    {
+      "category": "INCOMPAT",
+      "disk_field": "sb_features_incompat",
+      "bitmask_hex": "0x0040",
+      "bitmask_value": 64,
+      "kernel_func": "xfs_sb_has_incompat_feature(EXCHRANGE)",
+      "macro_name": "XFS_SB_FEAT_INCOMPAT_EXCHRANGE"
+    },
+    {
+      "category": "INCOMPAT",
+      "disk_field": "sb_features_incompat",
+      "bitmask_hex": "0x0080",
+      "bitmask_value": 128,
+      "kernel_func": "xfs_sb_has_incompat_feature(PARENT)",
+      "macro_name": "XFS_SB_FEAT_INCOMPAT_PARENT",
+      "note": "V5 parent pointers in inode"
+    }
+  ],
+  "disk_to_mem_mappings": [
+    {
+      "disk_field": "from->sb_magicnum",
+      "mem_field": "to->sb_magicnum",
+      "transform": "direct",
+      "detail": "to->sb_magicnum = be32_to_cpu(from->sb_magicnum)"
+    },
+    {
+      "disk_field": "from->sb_blocksize",
+      "mem_field": "to->sb_blocksize",
+      "transform": "direct",
+      "detail": "to->sb_blocksize = be32_to_cpu(from->sb_blocksize)"
+    },
+    {
+      "disk_field": "from->sb_blocklog",
+      "mem_field": "to->sb_blocklog",
+      "transform": "direct",
+      "detail": "to->sb_blocklog = from->sb_blocklog (u8, no endian conv)"
+    },
+    {
+      "disk_field": "from->sb_sectsize",
+      "mem_field": "to->sb_sectsize",
+      "transform": "direct",
+      "detail": "to->sb_sectsize = be16_to_cpu(from->sb_sectsize)"
+    },
+    {
+      "disk_field": "from->sb_sectlog",
+      "mem_field": "to->sb_sectlog",
+      "transform": "direct",
+      "detail": "to->sb_sectlog = from->sb_sectlog (u8)"
+    },
+    {
+      "disk_field": "from->sb_inodesize",
+      "mem_field": "to->sb_inodesize",
+      "transform": "direct",
+      "detail": "to->sb_inodesize = be16_to_cpu(from->sb_inodesize); validated 256|512|1024|2048"
+    },
+    {
+      "disk_field": "from->sb_inodelog",
+      "mem_field": "to->sb_inodelog",
+      "transform": "direct",
+      "detail": "to->sb_inodelog = from->sb_inodelog (u8)"
+    },
+    {
+      "disk_field": "from->sb_dblocks",
+      "mem_field": "to->sb_dblocks",
+      "transform": "direct",
+      "detail": "to->sb_dblocks = be64_to_cpu(from->sb_dblocks)"
+    },
+    {
+      "disk_field": "from->sb_agblocks",
+      "mem_field": "to->sb_agblocks",
+      "transform": "direct",
+      "detail": "to->sb_agblocks = be32_to_cpu(from->sb_agblocks)"
+    },
+    {
+      "disk_field": "from->sb_agcount",
+      "mem_field": "to->sb_agcount",
+      "transform": "direct",
+      "detail": "to->sb_agcount = be32_to_cpu(from->sb_agcount)"
+    },
+    {
+      "disk_field": "from->sb_imax_pct",
+      "mem_field": "to->sb_imax_pct",
+      "transform": "direct",
+      "detail": "to->sb_imax_pct = from->sb_imax_pct (u8)"
+    },
+    {
+      "disk_field": "from->sb_inoalignmt",
+      "mem_field": "to->sb_inoalignmt",
+      "transform": "direct",
+      "detail": "to->sb_inoalignmt = be32_to_cpu(from->sb_inoalignmt)"
+    },
+    {
+      "disk_field": "from->sb_unit",
+      "mem_field": "to->sb_unit",
+      "transform": "direct",
+      "detail": "to->sb_unit = be32_to_cpu(from->sb_unit)"
+    },
+    {
+      "disk_field": "from->sb_width",
+      "mem_field": "to->sb_width",
+      "transform": "direct",
+      "detail": "to->sb_width = be32_to_cpu(from->sb_width)"
+    },
+    {
+      "disk_field": "from->sb_dirblklog",
+      "mem_field": "to->sb_dirblklog",
+      "transform": "direct",
+      "detail": "to->sb_dirblklog = from->sb_dirblklog (u8)"
+    },
+    {
+      "disk_field": "from->sb_logsectsize",
+      "mem_field": "to->sb_logsectsize",
+      "transform": "direct",
+      "detail": "to->sb_logsectsize = be16_to_cpu(from->sb_logsectsize)"
+    },
+    {
+      "disk_field": "from->sb_logsunit",
+      "mem_field": "to->sb_logsunit",
+      "transform": "direct",
+      "detail": "to->sb_logsunit = be32_to_cpu(from->sb_logsunit)"
+    },
+    {
+      "disk_field": "from->sb_versionnum",
+      "mem_field": "to->sb_versionnum",
+      "transform": "direct",
+      "detail": "to->sb_versionnum = be16_to_cpu(from->sb_versionnum)"
+    },
+    {
+      "disk_field": "from->sb_features2",
+      "mem_field": "to->sb_features2",
+      "transform": "direct",
+      "detail": "to->sb_features2 = be32_to_cpu(from->sb_features2)"
+    },
+    {
+      "disk_field": "from->sb_features_compat",
+      "mem_field": "to->sb_features_compat",
+      "transform": "direct",
+      "detail": "to->sb_features_compat = be32_to_cpu(from->sb_features_compat)"
+    },
+    {
+      "disk_field": "from->sb_features_ro_compat",
+      "mem_field": "to->sb_features_ro_compat",
+      "transform": "direct",
+      "detail": "to->sb_features_ro_compat = be32_to_cpu(from->sb_features_ro_compat)"
+    },
+    {
+      "disk_field": "from->sb_features_incompat",
+      "mem_field": "to->sb_features_incompat",
+      "transform": "direct",
+      "detail": "to->sb_features_incompat = be32_to_cpu(from->sb_features_incompat)"
+    },
+    {
+      "disk_field": "from->sb_spino_align",
+      "mem_field": "to->sb_spino_align",
+      "transform": "direct",
+      "detail": "to->sb_spino_align = be32_to_cpu(from->sb_spino_align)"
+    },
+    {
+      "disk_field": "from->sb_uquotino",
+      "mem_field": "to->sb_uquotino",
+      "transform": "conditional",
+      "detail": "to->sb_uquotino = be64_to_cpu(from->sb_uquotino); 0→NULLFSINO if non-V5"
+    },
+    {
+      "disk_field": "from->sb_gquotino",
+      "mem_field": "to->sb_gquotino",
+      "transform": "conditional",
+      "detail": "to->sb_gquotino = be64_to_cpu(from->sb_gquotino); 0→NULLFSINO; if PQUOTA old: copy to pquotino"
+    },
+    {
+      "disk_field": "from->sb_pquotino",
+      "mem_field": "to->sb_pquotino",
+      "transform": "conditional",
+      "detail": "to->sb_pquotino = be64_to_cpu(from->sb_pquotino); may get gquotino value for old format"
+    },
+    {
+      "disk_field": "from->sb_qflags",
+      "mem_field": "to->sb_qflags",
+      "transform": "conditional",
+      "detail": "to->sb_qflags = be16_to_cpu(from->sb_qflags); OQUOTA_ENFD→PQUOTA, OQUOTA_CHKD→GQUOTA remap"
+    },
+    {
+      "disk_field": "from->sb_meta_uuid",
+      "mem_field": "to->sb_meta_uuid",
+      "transform": "conditional",
+      "detail": "if V5+META_UUID: uuid_copy(from sb_meta_uuid); else: uuid_copy(from sb_uuid)"
+    },
+    {
+      "disk_field": "from->sb_crc",
+      "mem_field": "to->sb_crc",
+      "transform": "direct",
+      "detail": "to->sb_crc = 0 (on-disk CRC not copied to memory)"
+    }
+  ],
+  "confd_to_superblock": [
+    {
+      "confd_param": "blocksize",
+      "confd_variable": "blocksize",
+      "disk_field": "sb_blocksize",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_blocksize",
+      "transform": "direct",
+      "note": "-b size: stored be32. blocklog = log2(blocksize) stored separately",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 4,
+      "mkfs_flag": "-b"
+    },
+    {
+      "confd_param": "blocklog",
+      "confd_variable": "blocklog",
+      "disk_field": "sb_blocklog",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_blocklog",
+      "transform": "direct",
+      "note": "log2(blocksize); single u8 byte",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 120,
+      "mkfs_flag": ""
+    },
+    {
+      "confd_param": "sectorsize",
+      "confd_variable": "sectorsize",
+      "disk_field": "sb_sectsize",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_sectsize",
+      "transform": "direct",
+      "note": "-s: stored be16",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 102,
+      "mkfs_flag": "-s"
+    },
+    {
+      "confd_param": "sectorlog",
+      "confd_variable": "sectorlog",
+      "disk_field": "sb_sectlog",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_sectlog",
+      "transform": "direct",
+      "note": "log2(sectorsize); single u8",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 121,
+      "mkfs_flag": ""
+    },
+    {
+      "confd_param": "lsectorsize",
+      "confd_variable": "lsectorsize",
+      "disk_field": "sb_logsectsize",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_logsectsize",
+      "transform": "direct",
+      "note": "-l sectsize: log device sector size; stored be16",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 194,
+      "mkfs_flag": "-l sectsize"
+    },
+    {
+      "confd_param": "lsectorlog",
+      "confd_variable": "lsectorlog",
+      "disk_field": "sb_logsectlog",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_logsectlog",
+      "transform": "direct",
+      "note": "log2(lsectorsize); single u8",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 193,
+      "mkfs_flag": ""
+    },
+    {
+      "confd_param": "dirblocksize",
+      "confd_variable": "dirblocksize",
+      "disk_field": "sb_dirblklog",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_dirblklog",
+      "transform": "computed",
+      "note": "-n size: stored as log2 relative to fs block: sb_dirblklog = log2(dirblocksize) - sb_blocklog",
+      "formula": "sb_dirblklog := log2(dirblocksize / blocksize)",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 192,
+      "mkfs_flag": "-n size"
+    },
+    {
+      "confd_param": "dirblocklog",
+      "confd_variable": "dirblocklog",
+      "disk_field": "sb_dirblklog",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_dirblklog",
+      "transform": "direct",
+      "note": "single u8; log2 of dir block size in fs blocks",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 192,
+      "mkfs_flag": ""
+    },
+    {
+      "confd_param": "inodesize",
+      "confd_variable": "inodesize",
+      "disk_field": "sb_inodesize",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_inodesize",
+      "transform": "direct",
+      "note": "-i size: stored be16; must be power of 2, 256..2048",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 104,
+      "mkfs_flag": "-i size"
+    },
+    {
+      "confd_param": "inodelog",
+      "confd_variable": "inodelog",
+      "disk_field": "sb_inodelog",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_inodelog",
+      "transform": "direct",
+      "note": "log2(inodesize); single u8",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 122,
+      "mkfs_flag": ""
+    },
+    {
+      "confd_param": "perblock",
+      "confd_variable": "inopblock",
+      "disk_field": "sb_inopblock",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_inopblock",
+      "transform": "computed",
+      "note": "-i perblock: inodes per block = blocksize / inodesize; stored be16",
+      "formula": "sb_inopblock := blocksize / inodesize",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 106,
+      "mkfs_flag": "-i perblock"
+    },
+    {
+      "confd_param": "dblocks",
+      "confd_variable": "dblocks",
+      "disk_field": "sb_dblocks",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_dblocks",
+      "transform": "direct",
+      "note": "-d size: stored be64",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 8,
+      "mkfs_flag": "-d size"
+    },
+    {
+      "confd_param": "logblocks",
+      "confd_variable": "logblocks",
+      "disk_field": "sb_logblocks",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_logblocks",
+      "transform": "direct",
+      "note": "-l size: stored be32",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 96,
+      "mkfs_flag": "-l size"
+    },
+    {
+      "confd_param": "rtblocks",
+      "confd_variable": "rtblocks",
+      "disk_field": "sb_rblocks",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_rblocks",
+      "transform": "direct",
+      "note": "-r size: stored be64",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 16,
+      "mkfs_flag": "-r size"
+    },
+    {
+      "confd_param": "rtextblocks",
+      "confd_variable": "rtextblocks",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "computed",
+      "note": "derived: rtblocks/rextsize; not stored in superblock",
+      "formula": "rtextblocks := rtblocks / rextsize (not stored in superblock)",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": ""
+    },
+    {
+      "confd_param": "rtextents",
+      "confd_variable": "rtextents",
+      "disk_field": "sb_rextents",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_rextents",
+      "transform": "direct",
+      "note": "stored be64",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 24,
+      "mkfs_flag": ""
+    },
+    {
+      "confd_param": "rtbmblocks",
+      "confd_variable": "rtbmblocks",
+      "disk_field": "sb_rbmblocks",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_rbmblocks",
+      "transform": "direct",
+      "note": "RT bitmap blocks; stored be32",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 92,
+      "mkfs_flag": ""
+    },
+    {
+      "confd_param": "dsunit",
+      "confd_variable": "dsunit",
+      "disk_field": "sb_unit",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_unit",
+      "transform": "direct",
+      "note": "-d sunit: data stripe unit in fsblocks; stored be32",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 184,
+      "mkfs_flag": "-d sunit"
+    },
+    {
+      "confd_param": "dswidth",
+      "confd_variable": "dswidth",
+      "disk_field": "sb_width",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_width",
+      "transform": "direct",
+      "note": "-d swidth: data stripe width in fsblocks; stored be32",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 188,
+      "mkfs_flag": "-d swidth"
+    },
+    {
+      "confd_param": "lsunit",
+      "confd_variable": "lsunit",
+      "disk_field": "sb_logsunit",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_logsunit",
+      "transform": "direct",
+      "note": "-l sunit: log stripe unit in blocks; stored be32",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 196,
+      "mkfs_flag": "-l sunit"
+    },
+    {
+      "confd_param": "agsize",
+      "confd_variable": "agsize",
+      "disk_field": "sb_agblocks",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_agblocks",
+      "transform": "direct",
+      "note": "-d agsize: AG size in fsblocks; stored be32",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 84,
+      "mkfs_flag": "-d agsize"
+    },
+    {
+      "confd_param": "agcount",
+      "confd_variable": "agcount",
+      "disk_field": "sb_agcount",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_agcount",
+      "transform": "direct",
+      "note": "-d agcount: stored be32",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 88,
+      "mkfs_flag": "-d agcount"
+    },
+    {
+      "confd_param": "maxpct",
+      "confd_variable": "imaxpct",
+      "disk_field": "sb_imax_pct",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_imax_pct",
+      "transform": "direct",
+      "note": "-i maxpct: max % of fs for inodes; single u8",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 127,
+      "mkfs_flag": "-i maxpct"
+    },
+    {
+      "confd_param": "internal",
+      "confd_variable": "loginternal",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "note": "-l internal: log inside fs (1) or external (0); affects logstart choice",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": "-l internal"
+    },
+    {
+      "confd_param": "logdev",
+      "confd_variable": "logstart",
+      "disk_field": "sb_logstart",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_logstart",
+      "transform": "direct",
+      "note": "-l dev: starting block of internal log; stored be64",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 48,
+      "mkfs_flag": "-l logdev"
+    },
+    {
+      "confd_param": "agnum",
+      "confd_variable": "logagno",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "computed",
+      "note": "-l agnum: used to compute logstart; not stored directly",
+      "formula": "logagno: used to compute logstart; not stored directly",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": "-l agnum"
+    },
+    {
+      "confd_param": "uuid",
+      "confd_variable": "uuid",
+      "disk_field": "sb_uuid",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_uuid",
+      "transform": "direct",
+      "note": "-m uuid: 16 bytes UUID",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 32,
+      "mkfs_flag": "-m uuid"
+    },
+    {
+      "confd_param": "label",
+      "confd_variable": "label",
+      "disk_field": "sb_fname",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_fname",
+      "transform": "direct",
+      "note": "-L: max 12 chars",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 108,
+      "mkfs_flag": "-L"
+    },
+    {
+      "confd_param": "sb_feat",
+      "confd_variable": "sb_feat",
+      "disk_field": "sb_versionnum+sb_features2",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "mp->m_sb.sb_versionnum",
+      "transform": "bitmask_check",
+      "note": "internal: composite bitmask set on versionnum+features2",
+      "formula": "sb_versionnum+sb_features2 := composite OR from feat_args",
+      "embedded_struct_type": "struct.xfs_sb",
+      "embedded_field_offset": 100,
+      "mkfs_flag": ""
+    },
+    {
+      "confd_param": "log_version",
+      "confd_variable": "log_version",
+      "disk_field": "sb_versionnum",
+      "bitmask_hex": "0x0400",
+      "bitmask_value": 1024,
+      "kernel_func": null,
+      "kernel_mem_field": "mp->m_sb.sb_versionnum",
+      "transform": "bitmask_check",
+      "note": "-l version=2: sets XFS_SB_VERSION_LOGV2BIT",
+      "formula": "sb_versionnum := sb_versionnum OR 0x0400",
+      "embedded_struct_type": "struct.xfs_sb",
+      "embedded_field_offset": 100,
+      "mkfs_flag": "-l version"
+    },
+    {
+      "confd_param": "attr",
+      "confd_variable": "attr_version",
+      "disk_field": "sb_versionnum+sb_features2",
+      "bitmask_hex": "0x0010",
+      "bitmask_value": 16,
+      "kernel_func": null,
+      "kernel_mem_field": "mp->m_sb.sb_versionnum",
+      "transform": "bitmask_check",
+      "note": "-i attr=1: ATTRBIT; =2: ATTRBIT+ATTR2BIT",
+      "formula": "sb_versionnum+sb_features2 := sb_versionnum+sb_features2 OR 0x0010",
+      "embedded_struct_type": "struct.xfs_sb",
+      "embedded_field_offset": 100,
+      "mkfs_flag": "-i attr"
+    },
+    {
+      "confd_param": "dir_version",
+      "confd_variable": "dir_version",
+      "disk_field": "sb_versionnum",
+      "bitmask_hex": "0x2000",
+      "bitmask_value": 8192,
+      "kernel_func": null,
+      "kernel_mem_field": "mp->m_sb.sb_versionnum",
+      "transform": "bitmask_check",
+      "note": "-n version=2: sets XFS_SB_VERSION_DIRV2BIT",
+      "formula": "sb_versionnum := sb_versionnum OR 0x2000",
+      "embedded_struct_type": "struct.xfs_sb",
+      "embedded_field_offset": 100,
+      "mkfs_flag": "-n version"
+    },
+    {
+      "confd_param": "align",
+      "confd_variable": "inode_align",
+      "disk_field": "sb_inoalignmt",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->sb_inoalignmt",
+      "transform": "direct",
+      "note": "-i align: inode chunk alignment in fsblocks; stored be32",
+      "embedded_struct_type": "struct.xfs_dsb",
+      "embedded_field_offset": 180,
+      "mkfs_flag": "-i align"
+    },
+    {
+      "confd_param": "lazy_count",
+      "confd_variable": "lazy_sb_counters",
+      "disk_field": "sb_features2",
+      "bitmask_hex": "0x0002",
+      "bitmask_value": 2,
+      "kernel_func": null,
+      "kernel_mem_field": "mp->m_sb.sb_features2",
+      "transform": "bitmask_check",
+      "note": "-l lazy-count=1: sets XFS_SB_VERSION2_LAZYSBCOUNTBIT",
+      "formula": "sb_features2 := sb_features2 OR 0x0002",
+      "embedded_struct_type": "struct.xfs_sb",
+      "embedded_field_offset": 200,
+      "mkfs_flag": "-l lazy-count"
+    },
+    {
+      "confd_param": "parent",
+      "confd_variable": "parent_pointers",
+      "disk_field": "sb_features2 or sb_features_incompat",
+      "bitmask_hex": "0x0010 or 0x0080",
+      "bitmask_value": "16 or 128",
+      "kernel_func": null,
+      "kernel_mem_field": "mp->m_sb.sb_features2 or sb_features_incompat",
+      "transform": "bitmask_check",
+      "formula": "sb_features2 or sb_features_incompat := sb_features2 or sb_features_incompat OR 0x0010 or 0x0080",
+      "note": "-n parent=1: V4→PARENTBIT(0x10), V5→INCOMPAT_PARENT(0x80)",
+      "embedded_struct_type": "struct.xfs_sb",
+      "embedded_field_offset": 200,
+      "mkfs_flag": "-n parent"
+    },
+    {
+      "confd_param": "projid32bit",
+      "confd_variable": "projid32bit",
+      "disk_field": "sb_features2",
+      "bitmask_hex": "0x0080",
+      "bitmask_value": 128,
+      "kernel_func": null,
+      "kernel_mem_field": "mp->m_sb.sb_features2",
+      "transform": "bitmask_check",
+      "note": "-i projid32bit=1: sets XFS_SB_VERSION2_PROJID32BIT",
+      "formula": "sb_features2 := sb_features2 OR 0x0010",
+      "embedded_struct_type": "struct.xfs_sb",
+      "embedded_field_offset": 200,
+      "mkfs_flag": "-i projid32bit"
+    },
+    {
+      "confd_param": "crc",
+      "confd_variable": "crcs_enabled",
+      "disk_field": "sb_features2+sb_versionnum",
+      "bitmask_hex": "0x0100",
+      "bitmask_value": 256,
+      "kernel_func": "xfs_sb_is_v5",
+      "kernel_mem_field": "mp->m_sb.sb_features2",
+      "transform": "bitmask_check",
+      "note": "-m crc=1: sets CRCBIT(0x100)+V5 superblock format",
+      "formula": "sb_features2+sb_versionnum := sb_features2+sb_versionnum OR 0x0100",
+      "embedded_struct_type": "struct.xfs_sb",
+      "embedded_field_offset": 200,
+      "mkfs_flag": "-m crc"
+    },
+    {
+      "confd_param": "ftype",
+      "confd_variable": "dirftype",
+      "disk_field": "sb_features2(V4) or sb_features_incompat(V5)",
+      "bitmask_hex": "0x0200 or 0x0001",
+      "bitmask_value": "512 or 1",
+      "kernel_func": null,
+      "kernel_mem_field": "mp->m_sb.sb_features2(V4) or sb_features_incompat(V5)",
+      "transform": "bitmask_check",
+      "formula": "sb_features2(V4) or sb_features_incompat(V5) := sb_features2(V4) or sb_features_incompat(V5) OR 0x0200 or 0x0001",
+      "note": "-n ftype=1: V4→features2 bit 0x200; V5→incompat bit 0",
+      "embedded_struct_type": "struct.xfs_sb",
+      "embedded_field_offset": 200,
+      "mkfs_flag": "-n ftype"
+    },
+    {
+      "confd_param": "finobt",
+      "confd_variable": "finobt",
+      "disk_field": "sb_features_ro_compat",
+      "bitmask_hex": "0x0001",
+      "bitmask_value": 1,
+      "kernel_func": "xfs_sb_has_ro_compat_feature(FINOBT)",
+      "kernel_mem_field": "mp->m_sb.sb_features_ro_compat",
+      "transform": "bitmask_check",
+      "note": "-m finobt=1: sets XFS_SB_FEAT_RO_COMPAT_FINOBT",
+      "formula": "sb_features_ro_compat := sb_features_ro_compat OR 0x0001",
+      "embedded_struct_type": "struct.xfs_sb",
+      "embedded_field_offset": 212,
+      "mkfs_flag": "-m finobt"
+    },
+    {
+      "confd_param": "sparse",
+      "confd_variable": "spinodes",
+      "disk_field": "sb_features_incompat",
+      "bitmask_hex": "0x0002",
+      "bitmask_value": 2,
+      "kernel_func": "xfs_sb_has_incompat_feature(SPINODES)",
+      "kernel_mem_field": "mp->m_sb.sb_features_incompat",
+      "transform": "bitmask_check",
+      "note": "-i sparse=1: sets XFS_SB_FEAT_INCOMPAT_SPINODES; also sets sb_spino_align",
+      "formula": "sb_features_incompat := sb_features_incompat OR 0x0002",
+      "embedded_struct_type": "struct.xfs_sb",
+      "embedded_field_offset": 216,
+      "mkfs_flag": "-i sparse"
+    },
+    {
+      "confd_param": "rmapbt",
+      "confd_variable": "rmapbt",
+      "disk_field": "sb_features_ro_compat",
+      "bitmask_hex": "0x0002",
+      "bitmask_value": 2,
+      "kernel_func": "xfs_sb_has_ro_compat_feature(RMAPBT)",
+      "kernel_mem_field": "mp->m_sb.sb_features_ro_compat",
+      "transform": "bitmask_check",
+      "note": "-m rmapbt=1: sets XFS_SB_FEAT_RO_COMPAT_RMAPBT",
+      "formula": "sb_features_ro_compat := sb_features_ro_compat OR 0x0002",
+      "embedded_struct_type": "struct.xfs_sb",
+      "embedded_field_offset": 212,
+      "mkfs_flag": "-m rmapbt"
+    },
+    {
+      "confd_param": "reflink",
+      "confd_variable": "reflink",
+      "disk_field": "sb_features_ro_compat",
+      "bitmask_hex": "0x0004",
+      "bitmask_value": 4,
+      "kernel_func": "xfs_sb_has_ro_compat_feature(REFLINK)",
+      "kernel_mem_field": "mp->m_sb.sb_features_ro_compat",
+      "transform": "bitmask_check",
+      "note": "-m reflink=1: sets XFS_SB_FEAT_RO_COMPAT_REFLINK",
+      "formula": "sb_features_ro_compat := sb_features_ro_compat OR 0x0004",
+      "embedded_struct_type": "struct.xfs_sb",
+      "embedded_field_offset": 212,
+      "mkfs_flag": "-m reflink"
+    },
+    {
+      "confd_param": "inobtcount",
+      "confd_variable": "inobtcnt",
+      "disk_field": "sb_features_ro_compat",
+      "bitmask_hex": "0x0008",
+      "bitmask_value": 8,
+      "kernel_func": "xfs_sb_has_ro_compat_feature(INOBTCNT)",
+      "kernel_mem_field": "mp->m_sb.sb_features_ro_compat",
+      "transform": "bitmask_check",
+      "note": "-m inobtcount=1: sets XFS_SB_FEAT_RO_COMPAT_INOBTCNT",
+      "formula": "sb_features_ro_compat := sb_features_ro_compat OR 0x0008",
+      "embedded_struct_type": "struct.xfs_sb",
+      "embedded_field_offset": 212,
+      "mkfs_flag": "-m inobtcount"
+    },
+    {
+      "confd_param": "bigtime",
+      "confd_variable": "bigtime",
+      "disk_field": "sb_features_incompat",
+      "bitmask_hex": "0x0008",
+      "bitmask_value": 8,
+      "kernel_func": "xfs_sb_has_incompat_feature(BIGTIME)",
+      "kernel_mem_field": "mp->m_sb.sb_features_incompat",
+      "transform": "bitmask_check",
+      "note": "-m bigtime=1: sets XFS_SB_FEAT_INCOMPAT_BIGTIME",
+      "formula": "sb_features_incompat := sb_features_incompat OR 0x0008",
+      "embedded_struct_type": "struct.xfs_sb",
+      "embedded_field_offset": 216,
+      "mkfs_flag": "-m bigtime"
+    },
+    {
+      "confd_param": "nodalign",
+      "confd_variable": "nodalign",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "note": "-d noalign: disables AG data alignment; runtime only",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": "-d noalign"
+    },
+    {
+      "confd_param": "nortalign",
+      "confd_variable": "nortalign",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "note": "-r noalign: disables RT extent alignment; runtime only",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": "-r noalign"
+    },
+    {
+      "confd_param": "nrext64",
+      "confd_variable": "nrext64",
+      "disk_field": "sb_features_incompat",
+      "bitmask_hex": "0x0020",
+      "bitmask_value": 32,
+      "kernel_func": "xfs_sb_has_incompat_feature(NREXT64)",
+      "kernel_mem_field": "mp->m_sb.sb_features_incompat",
+      "transform": "bitmask_check",
+      "note": "-i nrext64=1: sets XFS_SB_FEAT_INCOMPAT_NREXT64",
+      "formula": "sb_features_incompat := sb_features_incompat OR 0x0020",
+      "embedded_struct_type": "struct.xfs_sb",
+      "embedded_field_offset": 216,
+      "mkfs_flag": "-i nrext64"
+    },
+    {
+      "confd_param": "exchange",
+      "confd_variable": "exchrange",
+      "disk_field": "sb_features_incompat",
+      "bitmask_hex": "0x0040",
+      "bitmask_value": 64,
+      "kernel_func": "xfs_sb_has_incompat_feature(EXCHRANGE)",
+      "kernel_mem_field": "mp->m_sb.sb_features_incompat",
+      "transform": "bitmask_check",
+      "note": "-i exchange=1: sets XFS_SB_FEAT_INCOMPAT_EXCHRANGE",
+      "formula": "sb_features_incompat := sb_features_incompat OR 0x0040",
+      "embedded_struct_type": "struct.xfs_sb",
+      "embedded_field_offset": 216,
+      "mkfs_flag": "-i exchange"
+    },
+    {
+      "confd_param": "discard",
+      "confd_variable": "discard",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mkfs_flag": "-K",
+      "formula": null,
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    },
+    {
+      "confd_param": "dry_run",
+      "confd_variable": "dry_run",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mkfs_flag": "-N",
+      "formula": null,
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    },
+    {
+      "confd_param": "force_overwrite",
+      "confd_variable": "force_overwrite",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mkfs_flag": "-f",
+      "formula": null,
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    },
+    {
+      "confd_param": "protostring",
+      "confd_variable": "protostring",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mkfs_flag": "-p",
+      "formula": null,
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    }
+  ],
+  "usage_notes": {
+    "general_mechanism": "mkfs.xfs writes parameters to an on-disk xfs_dsb (big-endian format, 512 bytes). The kernel converts to host-endian xfs_sb via __xfs_sb_from_disk(). Feature bits are spread across 4 fields: sb_versionnum, sb_features2, sb_features_ro_compat, sb_features_incompat.",
+    "big_endian": "XFS is the ONLY filesystem using big-endian on-disk format. All multi-byte fields require beXX_to_cpu() conversion. Single-byte fields (blocklog, sectlog, inodelog, etc.) have no endian conversion.",
+    "v4_v5_superblock": "V4 superblock uses versionnum + features2 fields for feature bits. V5 superblock (CRC enabled) uses versionnum + features2 + features_compat/ro_compat/incompat. Some bits migrate between fields: dirftype is in features2(V4) or incompat(V5).",
+    "dirblocksize_calculation": "dirblocksize is stored as sb_dirblklog = log2(dirblocksize/fs_blocksize). NOT an absolute log2. e.g. dirblocksize=4096, blocksize=4096, sb_dirblklog=0.",
+    "quota_remap": "In non-V5 superblocks, quota inode values of 0 are converted to NULLFSINO. OQUOTA_ENFD/CHKD flags are remapped to actual PQUOTA or GQUOTA depending on which quota type is active.",
+    "feature_count": "Feature bits are spread across 4 different bitmask fields with different kernel access functions. The V5 superblock format consolidates newer features into the *_compat series."
+  }
+}

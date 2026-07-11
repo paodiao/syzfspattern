@@ -1,0 +1,898 @@
+{
+  "meta": {
+    "description": "Superblock field mapping for f2fs: kernel (6.12) → mkfs.f2fs (f2fs-tools 1.16.0) → ConfD mkfs_f2fs_constraints",
+    "struct_mkfs": "struct f2fs_configuration (mkfs in-memory config, global @c)",
+    "struct_disk": "struct f2fs_super_block (on-disk, 3072 bytes)",
+    "struct_mem": "struct f2fs_sb_info (kernel in-memory)",
+    "sources": {
+      "kernel_f2fs_h": "fssourcecode612/f2fs/f2fs.h:1563",
+      "kernel_super_c": "fssourcecode612/f2fs/super.c (f2fs_fill_super, init_sb_info, sanity_check_raw_super)",
+      "confd_constraints": "ConfD-core/Taint_Analyzer/mkfs_f2fs_constraints.json"
+    }
+  },
+  "superblock_field_layout": [
+    {
+      "offset_hex": "0x0",
+      "offset_dec": 0,
+      "size": 4,
+      "kernel_name": "magic",
+      "kernel_type": "__le32",
+      "doc": "Magic number (F2FS_SUPER_MAGIC = 0xF2F52010)"
+    },
+    {
+      "offset_hex": "0x4",
+      "offset_dec": 4,
+      "size": 2,
+      "kernel_name": "major_ver",
+      "kernel_type": "__le16",
+      "doc": "Major version"
+    },
+    {
+      "offset_hex": "0x6",
+      "offset_dec": 6,
+      "size": 2,
+      "kernel_name": "minor_ver",
+      "kernel_type": "__le16",
+      "doc": "Minor version"
+    },
+    {
+      "offset_hex": "0x8",
+      "offset_dec": 8,
+      "size": 4,
+      "kernel_name": "log_sectorsize",
+      "kernel_type": "__le32",
+      "doc": "log2(sector_size)"
+    },
+    {
+      "offset_hex": "0xC",
+      "offset_dec": 12,
+      "size": 4,
+      "kernel_name": "log_sectors_per_block",
+      "kernel_type": "__le32",
+      "doc": "log2(sectors_per_block)"
+    },
+    {
+      "offset_hex": "0x10",
+      "offset_dec": 16,
+      "size": 4,
+      "kernel_name": "log_blocksize",
+      "kernel_type": "__le32",
+      "doc": "log2(block_size); must be F2FS_BLKSIZE_BITS"
+    },
+    {
+      "offset_hex": "0x14",
+      "offset_dec": 20,
+      "size": 4,
+      "kernel_name": "log_blocks_per_seg",
+      "kernel_type": "__le32",
+      "doc": "log2(blocks_per_seg); must be 9"
+    },
+    {
+      "offset_hex": "0x18",
+      "offset_dec": 24,
+      "size": 4,
+      "kernel_name": "segs_per_sec",
+      "kernel_type": "__le32",
+      "doc": "Segments per section"
+    },
+    {
+      "offset_hex": "0x1C",
+      "offset_dec": 28,
+      "size": 4,
+      "kernel_name": "secs_per_zone",
+      "kernel_type": "__le32",
+      "doc": "Sections per zone"
+    },
+    {
+      "offset_hex": "0x20",
+      "offset_dec": 32,
+      "size": 4,
+      "kernel_name": "checksum_offset",
+      "kernel_type": "__le32",
+      "doc": "Checksum offset in superblock"
+    },
+    {
+      "offset_hex": "0x24",
+      "offset_dec": 36,
+      "size": 8,
+      "kernel_name": "block_count",
+      "kernel_type": "__le64",
+      "doc": "Total block count"
+    },
+    {
+      "offset_hex": "0x2C",
+      "offset_dec": 44,
+      "size": 4,
+      "kernel_name": "section_count",
+      "kernel_type": "__le32",
+      "doc": "Total section count"
+    },
+    {
+      "offset_hex": "0x30",
+      "offset_dec": 48,
+      "size": 4,
+      "kernel_name": "segment_count",
+      "kernel_type": "__le32",
+      "doc": "Total segment count"
+    },
+    {
+      "offset_hex": "0x34",
+      "offset_dec": 52,
+      "size": 4,
+      "kernel_name": "segment_count_ckpt",
+      "kernel_type": "__le32",
+      "doc": "Segments used by checkpoint"
+    },
+    {
+      "offset_hex": "0x38",
+      "offset_dec": 56,
+      "size": 4,
+      "kernel_name": "segment_count_sit",
+      "kernel_type": "__le32",
+      "doc": "Segments used by SIT"
+    },
+    {
+      "offset_hex": "0x3C",
+      "offset_dec": 60,
+      "size": 4,
+      "kernel_name": "segment_count_nat",
+      "kernel_type": "__le32",
+      "doc": "Segments used by NAT"
+    },
+    {
+      "offset_hex": "0x40",
+      "offset_dec": 64,
+      "size": 4,
+      "kernel_name": "segment_count_ssa",
+      "kernel_type": "__le32",
+      "doc": "Segments used by SSA"
+    },
+    {
+      "offset_hex": "0x44",
+      "offset_dec": 68,
+      "size": 4,
+      "kernel_name": "segment_count_main",
+      "kernel_type": "__le32",
+      "doc": "Segments for main area"
+    },
+    {
+      "offset_hex": "0x48",
+      "offset_dec": 72,
+      "size": 4,
+      "kernel_name": "section0_blkaddr",
+      "kernel_type": "__le32",
+      "doc": "Block address of section 0"
+    },
+    {
+      "offset_hex": "0x4C",
+      "offset_dec": 76,
+      "size": 4,
+      "kernel_name": "cp_blkaddr",
+      "kernel_type": "__le32",
+      "doc": "Block addr of checkpoint"
+    },
+    {
+      "offset_hex": "0x50",
+      "offset_dec": 80,
+      "size": 4,
+      "kernel_name": "sit_blkaddr",
+      "kernel_type": "__le32",
+      "doc": "Block addr of SIT"
+    },
+    {
+      "offset_hex": "0x54",
+      "offset_dec": 84,
+      "size": 4,
+      "kernel_name": "nat_blkaddr",
+      "kernel_type": "__le32",
+      "doc": "Block addr of NAT"
+    },
+    {
+      "offset_hex": "0x58",
+      "offset_dec": 88,
+      "size": 4,
+      "kernel_name": "ssa_blkaddr",
+      "kernel_type": "__le32",
+      "doc": "Block addr of SSA"
+    },
+    {
+      "offset_hex": "0x5C",
+      "offset_dec": 92,
+      "size": 4,
+      "kernel_name": "main_blkaddr",
+      "kernel_type": "__le32",
+      "doc": "Block addr of main area"
+    },
+    {
+      "offset_hex": "0x60",
+      "offset_dec": 96,
+      "size": 4,
+      "kernel_name": "root_ino",
+      "kernel_type": "__le32",
+      "doc": "Root inode number"
+    },
+    {
+      "offset_hex": "0x64",
+      "offset_dec": 100,
+      "size": 4,
+      "kernel_name": "node_ino",
+      "kernel_type": "__le32",
+      "doc": "Node inode number"
+    },
+    {
+      "offset_hex": "0x68",
+      "offset_dec": 104,
+      "size": 4,
+      "kernel_name": "meta_ino",
+      "kernel_type": "__le32",
+      "doc": "Meta inode number"
+    },
+    {
+      "offset_hex": "0x6C",
+      "offset_dec": 108,
+      "size": 16,
+      "kernel_name": "uuid",
+      "kernel_type": "__u8[16]",
+      "doc": "128-bit UUID"
+    },
+    {
+      "offset_hex": "0x7C",
+      "offset_dec": 124,
+      "size": 512,
+      "kernel_name": "volume_name",
+      "kernel_type": "__u8[512]",
+      "doc": "Volume name (le16 chars, max 256 chars)"
+    },
+    {
+      "offset_hex": "0x27C",
+      "offset_dec": 636,
+      "size": 4,
+      "kernel_name": "extension_count",
+      "kernel_type": "__le32",
+      "doc": "Extension count"
+    },
+    {
+      "offset_hex": "0x280",
+      "offset_dec": 640,
+      "size": 64,
+      "kernel_name": "extension_list",
+      "kernel_type": "__u8[64]",
+      "doc": "Extension list (64 bytes)"
+    },
+    {
+      "offset_hex": "0x2C0",
+      "offset_dec": 704,
+      "size": 4,
+      "kernel_name": "cp_payload",
+      "kernel_type": "__le32",
+      "doc": "Checkpoint payload"
+    },
+    {
+      "offset_hex": "0x2C4",
+      "offset_dec": 708,
+      "size": 16,
+      "kernel_name": "version",
+      "kernel_type": "__u8[16]",
+      "doc": "Version string"
+    },
+    {
+      "offset_hex": "0x2D4",
+      "offset_dec": 724,
+      "size": 16,
+      "kernel_name": "init_version",
+      "kernel_type": "__u8[16]",
+      "doc": "Initial version string"
+    },
+    {
+      "offset_hex": "0x2E4",
+      "offset_dec": 740,
+      "size": 4,
+      "kernel_name": "feature",
+      "kernel_type": "__le32",
+      "doc": "Feature flags bitmask"
+    },
+    {
+      "offset_hex": "0x2E8",
+      "offset_dec": 744,
+      "size": 16,
+      "kernel_name": "encryption_level",
+      "kernel_type": "__u8[16]",
+      "doc": "Encryption level"
+    },
+    {
+      "offset_hex": "0x2F8",
+      "offset_dec": 760,
+      "size": 2,
+      "kernel_name": "s_encoding",
+      "kernel_type": "__le16",
+      "doc": "Filename encoding (0=none)"
+    },
+    {
+      "offset_hex": "0x2FA",
+      "offset_dec": 762,
+      "size": 2,
+      "kernel_name": "s_encoding_flags",
+      "kernel_type": "__le16",
+      "doc": "Encoding flags"
+    },
+    {
+      "offset_hex": "0x2FC",
+      "offset_dec": 764,
+      "size": 4,
+      "kernel_name": "crc",
+      "kernel_type": "__le32",
+      "doc": "Superblock checksum"
+    }
+  ],
+  "feature_bitmask_mapping": [
+    {
+      "category": "FEATURE",
+      "disk_field": "feature",
+      "bitmask_hex": "0x0001",
+      "bitmask_value": 1,
+      "kernel_func": "f2fs_sb_has_encrypt",
+      "macro_name": "F2FS_FEATURE_ENCRYPT"
+    },
+    {
+      "category": "FEATURE",
+      "disk_field": "feature",
+      "bitmask_hex": "0x0002",
+      "bitmask_value": 2,
+      "kernel_func": "f2fs_sb_has_blkzoned",
+      "macro_name": "F2FS_FEATURE_BLKZONED"
+    },
+    {
+      "category": "FEATURE",
+      "disk_field": "feature",
+      "bitmask_hex": "0x0004",
+      "bitmask_value": 4,
+      "kernel_func": "f2fs_sb_has_atomic_write",
+      "macro_name": "F2FS_FEATURE_ATOMIC_WRITE"
+    },
+    {
+      "category": "FEATURE",
+      "disk_field": "feature",
+      "bitmask_hex": "0x0008",
+      "bitmask_value": 8,
+      "kernel_func": "f2fs_sb_has_extra_attr",
+      "macro_name": "F2FS_FEATURE_EXTRA_ATTR"
+    },
+    {
+      "category": "FEATURE",
+      "disk_field": "feature",
+      "bitmask_hex": "0x0010",
+      "bitmask_value": 16,
+      "kernel_func": "f2fs_sb_has_project_quota",
+      "macro_name": "F2FS_FEATURE_PRJQUOTA"
+    },
+    {
+      "category": "FEATURE",
+      "disk_field": "feature",
+      "bitmask_hex": "0x0020",
+      "bitmask_value": 32,
+      "kernel_func": "f2fs_sb_has_inode_chksum",
+      "macro_name": "F2FS_FEATURE_INODE_CHKSUM"
+    },
+    {
+      "category": "FEATURE",
+      "disk_field": "feature",
+      "bitmask_hex": "0x0040",
+      "bitmask_value": 64,
+      "kernel_func": "f2fs_sb_has_flexible_inline_xattr",
+      "macro_name": "F2FS_FEATURE_FLEXIBLE_INLINE_XATTR"
+    },
+    {
+      "category": "FEATURE",
+      "disk_field": "feature",
+      "bitmask_hex": "0x0080",
+      "bitmask_value": 128,
+      "kernel_func": "f2fs_sb_has_quota_ino",
+      "macro_name": "F2FS_FEATURE_QUOTA_INO"
+    },
+    {
+      "category": "FEATURE",
+      "disk_field": "feature",
+      "bitmask_hex": "0x0100",
+      "bitmask_value": 256,
+      "kernel_func": "f2fs_sb_has_inode_crtime",
+      "macro_name": "F2FS_FEATURE_INODE_CRTIME"
+    },
+    {
+      "category": "FEATURE",
+      "disk_field": "feature",
+      "bitmask_hex": "0x0200",
+      "bitmask_value": 512,
+      "kernel_func": "f2fs_sb_has_lost_found",
+      "macro_name": "F2FS_FEATURE_LOST_FOUND"
+    },
+    {
+      "category": "FEATURE",
+      "disk_field": "feature",
+      "bitmask_hex": "0x0400",
+      "bitmask_value": 1024,
+      "kernel_func": "f2fs_sb_has_verity",
+      "macro_name": "F2FS_FEATURE_VERITY"
+    },
+    {
+      "category": "FEATURE",
+      "disk_field": "feature",
+      "bitmask_hex": "0x0800",
+      "bitmask_value": 2048,
+      "kernel_func": "f2fs_sb_has_sb_chksum",
+      "macro_name": "F2FS_FEATURE_SB_CHKSUM"
+    },
+    {
+      "category": "FEATURE",
+      "disk_field": "feature",
+      "bitmask_hex": "0x1000",
+      "bitmask_value": 4096,
+      "kernel_func": "f2fs_sb_has_casefold",
+      "macro_name": "F2FS_FEATURE_CASEFOLD"
+    },
+    {
+      "category": "FEATURE",
+      "disk_field": "feature",
+      "bitmask_hex": "0x2000",
+      "bitmask_value": 8192,
+      "kernel_func": "f2fs_sb_has_compression",
+      "macro_name": "F2FS_FEATURE_COMPRESSION"
+    },
+    {
+      "category": "FEATURE",
+      "disk_field": "feature",
+      "bitmask_hex": "0x4000",
+      "bitmask_value": 16384,
+      "kernel_func": "f2fs_sb_has_readonly",
+      "macro_name": "F2FS_FEATURE_RO"
+    }
+  ],
+  "disk_to_mem_mappings": [
+    {
+      "disk_field": "raw_super->log_sectors_per_block",
+      "mem_field": "sbi->log_sectors_per_block",
+      "transform": "direct",
+      "detail": "sbi->log_sectors_per_block = le32_to_cpu(raw_super->log_sectors_per_block)"
+    },
+    {
+      "disk_field": "raw_super->log_blocksize",
+      "mem_field": "sbi->log_blocksize",
+      "transform": "direct",
+      "detail": "sbi->log_blocksize = le32_to_cpu(raw_super->log_blocksize); validated == F2FS_BLKSIZE_BITS"
+    },
+    {
+      "disk_field": "(derived)",
+      "mem_field": "sbi->blocksize",
+      "transform": "log2_scale",
+      "detail": "sbi->blocksize = BIT(sbi->log_blocksize)"
+    },
+    {
+      "disk_field": "raw_super->log_blocks_per_seg",
+      "mem_field": "sbi->log_blocks_per_seg",
+      "transform": "direct",
+      "detail": "sbi->log_blocks_per_seg = le32_to_cpu(raw_super->log_blocks_per_seg); validated == 9"
+    },
+    {
+      "disk_field": "(derived)",
+      "mem_field": "sbi->blocks_per_seg",
+      "transform": "log2_scale",
+      "detail": "sbi->blocks_per_seg = BIT(sbi->log_blocks_per_seg); = 512"
+    },
+    {
+      "disk_field": "raw_super->segs_per_sec",
+      "mem_field": "sbi->segs_per_sec",
+      "transform": "direct",
+      "detail": "sbi->segs_per_sec = le32_to_cpu(raw_super->segs_per_sec)"
+    },
+    {
+      "disk_field": "raw_super->secs_per_zone",
+      "mem_field": "sbi->secs_per_zone",
+      "transform": "direct",
+      "detail": "sbi->secs_per_zone = le32_to_cpu(raw_super->secs_per_zone)"
+    },
+    {
+      "disk_field": "raw_super->section_count",
+      "mem_field": "sbi->total_sections",
+      "transform": "direct",
+      "detail": "sbi->total_sections = le32_to_cpu(raw_super->section_count)"
+    },
+    {
+      "disk_field": "raw_super->root_ino",
+      "mem_field": "F2FS_ROOT_INO(sbi)",
+      "transform": "direct",
+      "detail": "F2FS_ROOT_INO(sbi) = le32_to_cpu(raw_super->root_ino); validated == 3"
+    },
+    {
+      "disk_field": "raw_super->node_ino",
+      "mem_field": "F2FS_NODE_INO(sbi)",
+      "transform": "direct",
+      "detail": "F2FS_NODE_INO(sbi) = le32_to_cpu(raw_super->node_ino); validated == 1"
+    },
+    {
+      "disk_field": "raw_super->meta_ino",
+      "mem_field": "F2FS_META_INO(sbi)",
+      "transform": "direct",
+      "detail": "F2FS_META_INO(sbi) = le32_to_cpu(raw_super->meta_ino); validated == 2"
+    },
+    {
+      "disk_field": "raw_super->uuid",
+      "mem_field": "sb->s_uuid",
+      "transform": "direct",
+      "detail": "super_set_uuid(sb, (void *)raw_super->uuid, sizeof(raw_super->uuid))"
+    },
+    {
+      "disk_field": "raw_super->uuid",
+      "mem_field": "sbi->s_chksum_seed",
+      "transform": "conditional",
+      "detail": "if (f2fs_sb_has_inode_chksum(sbi)) sbi->s_chksum_seed = f2fs_chksum(sbi, ~0, raw_super->uuid, 16)"
+    },
+    {
+      "disk_field": "raw_super->s_errors",
+      "mem_field": "sbi->errors",
+      "transform": "direct",
+      "detail": "memcpy(sbi->errors, raw_super->s_errors, MAX_F2FS_ERRORS)"
+    },
+    {
+      "disk_field": "raw_super->log_blocksize",
+      "mem_field": "sb->s_maxbytes",
+      "transform": "log2_scale",
+      "detail": "sb->s_maxbytes = max_file_blocks(NULL) << le32_to_cpu(raw_super->log_blocksize)"
+    }
+  ],
+  "confd_to_superblock": [
+    {
+      "confd_param": "heap",
+      "confd_variable": "@c, i32 0, i32 29",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mke2fs_flag": "-a",
+      "note": "heap start offset for mkfs allocation",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    },
+    {
+      "confd_param": "defset_android",
+      "confd_variable": "@c, i32 0, i32 46",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mke2fs_flag": "-g",
+      "note": "-g android: preset Android config defaults",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    },
+    {
+      "confd_param": "large_nat_bitmap",
+      "confd_variable": "@c, i32 0, i32 62",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mke2fs_flag": "-i",
+      "note": "-i: sets CP_LARGE_NAT_BITMAP_FLAG in checkpoint, NOT superblock",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    },
+    {
+      "confd_param": "vol_label",
+      "confd_variable": "@c, i32 0, i32 25",
+      "disk_field": "volume_name",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "F2FS_SB(sb)->raw_super->volume_name",
+      "transform": "direct",
+      "mke2fs_flag": "-l",
+      "note": "-l: max 256 chars, stored as le16",
+      "embedded_struct_type": "struct.f2fs_super_block",
+      "embedded_field_offset": 124
+    },
+    {
+      "confd_param": "zoned_mode",
+      "confd_variable": "@c, i32 0, i32 3",
+      "disk_field": "feature",
+      "bitmask_hex": "0x0002",
+      "bitmask_value": 2,
+      "kernel_func": "f2fs_sb_has_blkzoned",
+      "kernel_mem_field": "F2FS_SB(sb)->raw_super->feature",
+      "transform": "bitmask_check",
+      "mke2fs_flag": "-m",
+      "note": "-m: sets F2FS_FEATURE_BLKZONED",
+      "formula": "feature := feature OR 0x0002",
+      "embedded_struct_type": "struct.f2fs_super_block",
+      "embedded_field_offset": 740
+    },
+    {
+      "confd_param": "overprovision",
+      "confd_variable": "@c, i32 0, i32 6",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "computed",
+      "mke2fs_flag": "-o",
+      "note": "-o: overprovision ratio → segment_main_count computation",
+      "formula": "segment_count_main := f(overprovision) = total_segments * (1 - user_value/100)",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    },
+    {
+      "confd_param": "features",
+      "confd_variable": "parse_feature",
+      "disk_field": "feature",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "F2FS_SB(sb)->raw_super->feature",
+      "transform": "bitmask_check",
+      "mke2fs_flag": "-O",
+      "note": "-O: composite bitmask OR from parse_feature()",
+      "formula": "feature := composite OR from parse_feature()",
+      "embedded_struct_type": "struct.f2fs_super_block",
+      "embedded_field_offset": 740
+    },
+    {
+      "confd_param": "fake_seed",
+      "confd_variable": "@c, i32 0, i32 67",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mke2fs_flag": "-r",
+      "note": "-r: fake seed for deterministic format",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    },
+    {
+      "confd_param": "root_owner",
+      "confd_variable": "parse_root_owner",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mke2fs_flag": "-R",
+      "note": "-R: root inode UID/GID",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    },
+    {
+      "confd_param": "segs_per_sec",
+      "confd_variable": "@c, i32 0, i32 9",
+      "disk_field": "segs_per_sec",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sbi->segs_per_sec",
+      "transform": "direct",
+      "mke2fs_flag": "-s",
+      "note": "-s: stored as le32",
+      "formula": "segs_per_sec := user_value",
+      "embedded_struct_type": "struct.f2fs_sb_info",
+      "embedded_field_offset": 24
+    },
+    {
+      "confd_param": "device_size_sparse",
+      "confd_variable": "@c, i32 0, i32 15",
+      "disk_field": "block_count",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "F2FS_SB(sb)->raw_super->block_count",
+      "transform": "computed",
+      "mke2fs_flag": "-S",
+      "note": "-S: sparse_mode limits visible device size",
+      "formula": "block_count := if sparse_mode then user_value else device_size_bytes / block_size",
+      "embedded_struct_type": "struct.f2fs_super_block",
+      "embedded_field_offset": 36
+    },
+    {
+      "confd_param": "secs_per_zone",
+      "confd_variable": "@c, i32 0, i32 10",
+      "disk_field": "secs_per_zone",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sbi->secs_per_zone",
+      "transform": "direct",
+      "mke2fs_flag": "-z",
+      "note": "-z: stored as le32",
+      "formula": "secs_per_zone := user_value",
+      "embedded_struct_type": "struct.f2fs_sb_info",
+      "embedded_field_offset": 28
+    },
+    {
+      "confd_param": "trim",
+      "confd_variable": "@c, i32 0, i32 38",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mke2fs_flag": "-t",
+      "note": "-t: trim/discard during mkfs",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    },
+    {
+      "confd_param": "fixed_time",
+      "confd_variable": "@c, i32 0, i32 66",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mke2fs_flag": "-T",
+      "note": "-T: fixed creation timestamp (affects checkpoint)",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    },
+    {
+      "confd_param": "vol_uuid",
+      "confd_variable": "@c, i32 0, i32 26",
+      "disk_field": "uuid",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->s_uuid",
+      "transform": "direct",
+      "mke2fs_flag": "-U",
+      "note": "-U: 16 bytes UUID",
+      "embedded_struct_type": "struct.super_block",
+      "embedded_field_offset": 108
+    },
+    {
+      "confd_param": "force_overwrite",
+      "confd_variable": "force_overwrite",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mke2fs_flag": "-f",
+      "note": "-f: force overwrite",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    },
+    {
+      "confd_param": "wanted_sector_size",
+      "confd_variable": "@c, i32 0, i32 18",
+      "disk_field": "log_sectorsize",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sbi->log_sectors_per_block",
+      "transform": "log2_scale",
+      "mke2fs_flag": "-w",
+      "note": "-w: log2(sector_size) stored as le32",
+      "formula": "log_sectorsize := log2(user_value)",
+      "embedded_struct_type": "struct.f2fs_sb_info",
+      "embedded_field_offset": 8
+    },
+    {
+      "confd_param": "debug_level",
+      "confd_variable": "@c, i32 0, i32 36",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mke2fs_flag": "-d",
+      "note": "-d: debug output level",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    },
+    {
+      "confd_param": "encoding",
+      "confd_variable": "@c, i32 0, i32 27",
+      "disk_field": "s_encoding",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": "f2fs_sb_has_casefold",
+      "kernel_mem_field": "F2FS_SB(sb)->raw_super->s_encoding",
+      "transform": "direct",
+      "mke2fs_flag": "-C",
+      "note": "-C: filename charset encoding (le16); enables F2FS_FEATURE_CASEFOLD",
+      "formula": "s_encoding := user_value",
+      "embedded_struct_type": "struct.f2fs_super_block",
+      "embedded_field_offset": 760
+    },
+    {
+      "confd_param": "encoding_flags",
+      "confd_variable": "@c, i32 0, i32 28",
+      "disk_field": "s_encoding_flags",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "F2FS_SB(sb)->raw_super->s_encoding_flags",
+      "transform": "direct",
+      "mke2fs_flag": "-C",
+      "note": "-C: encoding flags (le16)",
+      "formula": "s_encoding_flags := user_value",
+      "embedded_struct_type": "struct.f2fs_super_block",
+      "embedded_field_offset": 762
+    },
+    {
+      "confd_param": "extension_list_cold",
+      "confd_variable": "@c, i32 0, i32 34, i64 0",
+      "disk_field": "extension_list",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "F2FS_SB(sb)->raw_super->extension_list",
+      "transform": "direct",
+      "mke2fs_flag": "-e",
+      "note": "-e: cold extension list",
+      "embedded_struct_type": "struct.f2fs_super_block",
+      "embedded_field_offset": 640
+    },
+    {
+      "confd_param": "extension_list_hot",
+      "confd_variable": "@c, i32 0, i32 34, i64 1",
+      "disk_field": "extension_list",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "F2FS_SB(sb)->raw_super->extension_list",
+      "transform": "direct",
+      "mke2fs_flag": "-E",
+      "note": "-E: hot extension list",
+      "embedded_struct_type": "struct.f2fs_super_block",
+      "embedded_field_offset": 640
+    },
+    {
+      "confd_param": "sparse_mode",
+      "confd_variable": "@c, i32 0, i32 2",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "computed",
+      "mke2fs_flag": "",
+      "note": "internal: sparse block_count computation",
+      "formula": "block_count := computed from device_size_sparse if sparse_mode enabled",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    },
+    {
+      "confd_param": "ndevs",
+      "confd_variable": "@c, i32 0, i32 33",
+      "disk_field": "devs[]",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "direct",
+      "mke2fs_flag": "-c",
+      "note": "-c: device entry count",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    }
+  ],
+  "usage_notes": {
+    "general_mechanism": "mkfs.f2fs writes parameters from the f2fs_configuration struct (global @c) to the on-disk f2fs_super_block. The kernel reads via f2fs_fill_super → init_sb_info().",
+    "struct_note": "The mkfs JSON declares 'struct.f2fs_configuration' (in-memory config), NOT the on-disk 'struct f2fs_super_block'. All confd_variable values use LLVM GEP path notation '@c, i32 0, i32 NN'.",
+    "log2_fields": "Most size fields are stored as log2 in le32 format: log_sectorsize, log_blocksize, log_blocks_per_seg, log_sectors_per_block. The kernel uses BIT(val) = 1 << val to convert back.",
+    "large_nat_bitmap_in_checkpoint": "large_nat_bitmap (-i flag) sets CP_LARGE_NAT_BITMAP_FLAG in the checkpoint, not in f2fs_super_block. It is marked runtime_only in this mapping.",
+    "feature_single_bitmap": "All f2fs features are stored in a single 'feature' field (le32) via bitwise OR. The -O flag aggregates multiple features via parse_feature().",
+    "init_config_blind_spot": "f2fs_init_configuration() defaults are in libf2fs.c (shared library, not in the 3 mkfs .ll files). Some parameters may have their initial values set by this external function and are invisible to ConD's static analysis.",
+    "checkpoint_fields": "fixed_time affects checkpoint timestamps, not superblock. Several mkfs parameters affect checkpoint data rather than the superblock itself."
+  }
+}

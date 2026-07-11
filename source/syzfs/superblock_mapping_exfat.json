@@ -1,0 +1,426 @@
+{
+  "meta": {
+    "description": "Superblock field mapping for exfat: kernel (6.12) → mkfs.exfat (exfatprogs 1.3.2) → ConfD mkfs_exfat_constraints",
+    "struct_mkfs": "struct exfat_user_input (mkfs in-memory config)",
+    "struct_disk": "struct boot_sector (on-disk, 512 bytes)",
+    "struct_mem": "struct exfat_sb_info (kernel in-memory)",
+    "sources": {
+      "kernel_raw_h": "fssourcecode612/exfat/exfat_raw.h:89",
+      "kernel_fs_h": "fssourcecode612/exfat/exfat_fs.h:248",
+      "kernel_super_c": "fssourcecode612/exfat/super.c (exfat_fill_super, exfat_read_boot_sector)",
+      "confd_constraints": "ConfD-core/Taint_Analyzer/mkfs_exfat_constraints.json"
+    }
+  },
+  "superblock_field_layout": [
+    {
+      "offset_hex": "0x0",
+      "offset_dec": 0,
+      "size": 3,
+      "kernel_name": "jmp_boot",
+      "kernel_type": "__u8[3]",
+      "doc": "Jump boot code (0xEB 0x76 0x90)"
+    },
+    {
+      "offset_hex": "0x3",
+      "offset_dec": 3,
+      "size": 8,
+      "kernel_name": "oem_name",
+      "kernel_type": "char[8]",
+      "doc": "OEM Name ('EXFAT   ')"
+    },
+    {
+      "offset_hex": "0xB",
+      "offset_dec": 11,
+      "size": 53,
+      "kernel_name": "res_zero",
+      "kernel_type": "__u8[53]",
+      "doc": "Reserved (0x00 filled)"
+    },
+    {
+      "offset_hex": "0x40",
+      "offset_dec": 64,
+      "size": 8,
+      "kernel_name": "vol_offset",
+      "kernel_type": "__le64",
+      "doc": "Partition offset (absolute sector)"
+    },
+    {
+      "offset_hex": "0x48",
+      "offset_dec": 72,
+      "size": 8,
+      "kernel_name": "vol_length",
+      "kernel_type": "__le64",
+      "doc": "Volume length in sectors"
+    },
+    {
+      "offset_hex": "0x50",
+      "offset_dec": 80,
+      "size": 4,
+      "kernel_name": "fat_offset",
+      "kernel_type": "__le32",
+      "doc": "FAT table start sector (relative to vol_offset)"
+    },
+    {
+      "offset_hex": "0x54",
+      "offset_dec": 84,
+      "size": 4,
+      "kernel_name": "fat_length",
+      "kernel_type": "__le32",
+      "doc": "FAT table length in sectors"
+    },
+    {
+      "offset_hex": "0x58",
+      "offset_dec": 88,
+      "size": 4,
+      "kernel_name": "clu_offset",
+      "kernel_type": "__le32",
+      "doc": "Cluster heap start sector"
+    },
+    {
+      "offset_hex": "0x5C",
+      "offset_dec": 92,
+      "size": 4,
+      "kernel_name": "clu_count",
+      "kernel_type": "__le32",
+      "doc": "Cluster count"
+    },
+    {
+      "offset_hex": "0x60",
+      "offset_dec": 96,
+      "size": 4,
+      "kernel_name": "root_cluster",
+      "kernel_type": "__le32",
+      "doc": "Root directory first cluster"
+    },
+    {
+      "offset_hex": "0x64",
+      "offset_dec": 100,
+      "size": 4,
+      "kernel_name": "vol_serial",
+      "kernel_type": "__le32",
+      "doc": "Volume serial number (4 bytes of GUID)"
+    },
+    {
+      "offset_hex": "0x68",
+      "offset_dec": 104,
+      "size": 2,
+      "kernel_name": "fs_revision",
+      "kernel_type": "__le16",
+      "doc": "File system revision (1.00)"
+    },
+    {
+      "offset_hex": "0x6A",
+      "offset_dec": 106,
+      "size": 2,
+      "kernel_name": "vol_flags",
+      "kernel_type": "__le16",
+      "doc": "Volume flags (VOLUME_DIRTY=0x01, MEDIA_FAILURE=0x02)"
+    },
+    {
+      "offset_hex": "0x6C",
+      "offset_dec": 108,
+      "size": 1,
+      "kernel_name": "sect_size_bits",
+      "kernel_type": "__u8",
+      "doc": "Sector size: 2^value bytes (9→512, 12→4096)"
+    },
+    {
+      "offset_hex": "0x6D",
+      "offset_dec": 109,
+      "size": 1,
+      "kernel_name": "sect_per_clus_bits",
+      "kernel_type": "__u8",
+      "doc": "Sectors per cluster: log2(cluster_size/sector_size)"
+    },
+    {
+      "offset_hex": "0x6E",
+      "offset_dec": 110,
+      "size": 1,
+      "kernel_name": "num_fats",
+      "kernel_type": "__u8",
+      "doc": "Number of FATs (1 or 2)"
+    },
+    {
+      "offset_hex": "0x6F",
+      "offset_dec": 111,
+      "size": 1,
+      "kernel_name": "drv_sel",
+      "kernel_type": "__u8",
+      "doc": "Drive select (INT 13h)"
+    },
+    {
+      "offset_hex": "0x70",
+      "offset_dec": 112,
+      "size": 1,
+      "kernel_name": "percent_in_use",
+      "kernel_type": "__u8",
+      "doc": "Percentage of allocated clusters"
+    },
+    {
+      "offset_hex": "0x71",
+      "offset_dec": 113,
+      "size": 7,
+      "kernel_name": "reserved1",
+      "kernel_type": "__u8[7]",
+      "doc": "Reserved"
+    },
+    {
+      "offset_hex": "0x78",
+      "offset_dec": 120,
+      "size": 390,
+      "kernel_name": "boot_code",
+      "kernel_type": "__u8[390]",
+      "doc": "Boot code"
+    },
+    {
+      "offset_hex": "0x1FE",
+      "offset_dec": 510,
+      "size": 2,
+      "kernel_name": "signature",
+      "kernel_type": "__le16",
+      "doc": "Boot signature (0xAA55)"
+    }
+  ],
+  "feature_bitmask_mapping": [],
+  "disk_to_mem_mappings": [
+    {
+      "disk_field": "p_boot->sect_size_bits",
+      "mem_field": "sbi->sect_size_bits",
+      "transform": "direct",
+      "detail": "sbi->sect_size_bits = p_boot->sect_size_bits (validated 9..12)"
+    },
+    {
+      "disk_field": "p_boot->sect_per_clus_bits",
+      "mem_field": "sbi->sect_per_clus_bits",
+      "transform": "direct",
+      "detail": "sbi->sect_per_clus_bits = p_boot->sect_per_clus_bits"
+    },
+    {
+      "disk_field": "p_boot->sect_per_clus_bits",
+      "mem_field": "sbi->sect_per_clus",
+      "transform": "log2_scale",
+      "detail": "sbi->sect_per_clus = 1 << p_boot->sect_per_clus_bits"
+    },
+    {
+      "disk_field": "(derived)",
+      "mem_field": "sbi->cluster_size_bits",
+      "transform": "computed",
+      "detail": "sbi->cluster_size_bits = p_boot->sect_per_clus_bits + p_boot->sect_size_bits"
+    },
+    {
+      "disk_field": "(derived)",
+      "mem_field": "sbi->cluster_size",
+      "transform": "log2_scale",
+      "detail": "sbi->cluster_size = 1 << sbi->cluster_size_bits"
+    },
+    {
+      "disk_field": "p_boot->fat_length",
+      "mem_field": "sbi->num_FAT_sectors",
+      "transform": "direct",
+      "detail": "sbi->num_FAT_sectors = le32_to_cpu(p_boot->fat_length)"
+    },
+    {
+      "disk_field": "p_boot->fat_offset",
+      "mem_field": "sbi->FAT1_start_sector",
+      "transform": "direct",
+      "detail": "sbi->FAT1_start_sector = le32_to_cpu(p_boot->fat_offset)"
+    },
+    {
+      "disk_field": "(derived)",
+      "mem_field": "sbi->FAT2_start_sector",
+      "transform": "conditional",
+      "detail": "FAT2 = FAT1; if num_fats==2: FAT2 += num_FAT_sectors"
+    },
+    {
+      "disk_field": "p_boot->clu_offset",
+      "mem_field": "sbi->data_start_sector",
+      "transform": "direct",
+      "detail": "sbi->data_start_sector = le32_to_cpu(p_boot->clu_offset)"
+    },
+    {
+      "disk_field": "p_boot->vol_length",
+      "mem_field": "sbi->num_sectors",
+      "transform": "direct",
+      "detail": "sbi->num_sectors = le64_to_cpu(p_boot->vol_length)"
+    },
+    {
+      "disk_field": "p_boot->clu_count",
+      "mem_field": "sbi->num_clusters",
+      "transform": "conditional",
+      "detail": "sbi->num_clusters = le32_to_cpu(p_boot->clu_count) + EXFAT_RESERVED_CLUSTERS (2)"
+    },
+    {
+      "disk_field": "p_boot->root_cluster",
+      "mem_field": "sbi->root_dir",
+      "transform": "direct",
+      "detail": "sbi->root_dir = le32_to_cpu(p_boot->root_cluster)"
+    },
+    {
+      "disk_field": "p_boot->vol_flags",
+      "mem_field": "sbi->vol_flags",
+      "transform": "direct",
+      "detail": "sbi->vol_flags = le16_to_cpu(p_boot->vol_flags)"
+    },
+    {
+      "disk_field": "(derived)",
+      "mem_field": "sbi->dentries_per_clu",
+      "transform": "log2_scale",
+      "detail": "sbi->dentries_per_clu = 1 << (cluster_size_bits - DENTRY_SIZE_BITS)"
+    },
+    {
+      "disk_field": "p_boot->sect_size_bits",
+      "mem_field": "sb->s_blocksize",
+      "transform": "log2_scale",
+      "detail": "exfat_calibrate_blocksize(sb, 1 << p_boot->sect_size_bits)"
+    }
+  ],
+  "confd_to_superblock": [
+    {
+      "confd_param": "sector_size",
+      "confd_variable": "sector_size",
+      "disk_field": "sect_size_bits",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sbi->sect_size_bits",
+      "transform": "log2_scale",
+      "mke2fs_flag": "-s",
+      "formula": "sect_size_bits := log2(user_value)",
+      "embedded_struct_type": "struct.exfat_sb_info",
+      "embedded_field_offset": 108
+    },
+    {
+      "confd_param": "cluster_size",
+      "confd_variable": "cluster_size",
+      "disk_field": "sect_per_clus_bits",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sbi->sect_per_clus_bits",
+      "transform": "log2_scale",
+      "mke2fs_flag": "-c",
+      "formula": "sect_per_clus_bits := log2(user_value / sector_size)",
+      "embedded_struct_type": "struct.exfat_sb_info",
+      "embedded_field_offset": 109
+    },
+    {
+      "confd_param": "boundary_align",
+      "confd_variable": "boundary_align",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mke2fs_flag": "-b",
+      "note": "mkfs layout parameter, not stored on disk",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    },
+    {
+      "confd_param": "volume_label",
+      "confd_variable": "volume_label",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mke2fs_flag": "-L",
+      "note": "stored in root directory dentry, NOT in boot_sector",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    },
+    {
+      "confd_param": "volume_guid",
+      "confd_variable": "volume_guid",
+      "disk_field": "vol_serial",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sbi->vol_serial",
+      "transform": "direct",
+      "mke2fs_flag": "-U",
+      "note": "32-bit serial number (truncated from 128-bit GUID)",
+      "embedded_struct_type": "struct.exfat_sb_info",
+      "embedded_field_offset": 100
+    },
+    {
+      "confd_param": "pack_bitmap",
+      "confd_variable": "pack_bitmap",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mke2fs_flag": "--pack-bitmap",
+      "note": "affects allocation bitmap location",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    },
+    {
+      "confd_param": "full_format",
+      "confd_variable": "quick",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mke2fs_flag": "-f",
+      "note": "full format (zero-out all clusters)",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    },
+    {
+      "confd_param": "check_written",
+      "confd_variable": "verify",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mke2fs_flag": "-C",
+      "note": "read-back verify after write",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    },
+    {
+      "confd_param": "no_discard",
+      "confd_variable": "discard",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mke2fs_flag": "-K",
+      "note": "skip TRIM/discard during mkfs",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    },
+    {
+      "confd_param": "zero_out",
+      "confd_variable": "zero_out",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mke2fs_flag": "",
+      "note": "internal flag: zero-out device before formatting",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    }
+  ],
+  "usage_notes": {
+    "general_mechanism": "exfat mkfs writes user-input parameters to a boot_sector (superblock equivalent). Most parameters are runtime-only and do not appear in the on-disk structure.",
+    "struct_note": "The mkfs JSON declares 'struct.exfat_user_input' (mkfs in-memory config), not the on-disk 'struct boot_sector'. kernel in-memory struct is 'struct exfat_sb_info'.",
+    "volume_label_storage": "Volume label is NOT in the boot_sector. It is stored in the root directory as exFAT dentry entries, which is why it is marked runtime_only in this mapping.",
+    "log_scale_fields": "sect_size_bits and sect_per_clus_bits are stored as log2 of the actual values. Example: sector_size=512 → sect_size_bits=9; cluster_size/sector_size=256 → sect_per_clus_bits=8",
+    "runtime_heavy": "8 of 10 parameters are runtime_only — exfat mkfs has few tunable on-disk parameters compared to other filesystems."
+  }
+}

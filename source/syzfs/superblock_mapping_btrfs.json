@@ -1,0 +1,799 @@
+{
+  "meta": {
+    "description": "Superblock field mapping for btrfs: kernel (6.12) → mkfs.btrfs (btrfs-progs 6.12) → ConfD mkfs_btrfs_constraints",
+    "struct_mkfs": "struct btrfs_mkfs_config + struct btrfs_mkfs_features (mkfs in-memory config)",
+    "struct_disk": "struct btrfs_super_block (on-disk, 4096 bytes, packed)",
+    "struct_mem": "struct btrfs_fs_info (kernel in-memory)",
+    "sources": {
+      "kernel_btrfs_tree_h": "fssourcecode612/btrfs/../uapi/linux/btrfs_tree.h (via btrfs-progs kernel-shared/uapi/btrfs_tree.h:649)",
+      "kernel_fs_h": "fssourcecode612/btrfs/fs.h:410",
+      "kernel_disk_io_c": "fssourcecode612/btrfs/disk-io.c (open_ctree)",
+      "kernel_super_c": "fssourcecode612/btrfs/super.c (btrfs_fill_super)",
+      "kernel_accessors_h": "fssourcecode612/btrfs/accessors.h",
+      "confd_constraints": "ConfD-core/Taint_Analyzer/mkfs_btrfs_constraints.json"
+    }
+  },
+  "superblock_field_layout": [
+    {
+      "offset_hex": "0x0",
+      "offset_dec": 0,
+      "size": 32,
+      "kernel_name": "csum",
+      "kernel_type": "__u8[32]",
+      "doc": "Checksum of superblock"
+    },
+    {
+      "offset_hex": "0x20",
+      "offset_dec": 32,
+      "size": 16,
+      "kernel_name": "fsid",
+      "kernel_type": "__u8[16]",
+      "doc": "FS UUID"
+    },
+    {
+      "offset_hex": "0x30",
+      "offset_dec": 48,
+      "size": 8,
+      "kernel_name": "bytenr",
+      "kernel_type": "__le64",
+      "doc": "Physical address of this superblock"
+    },
+    {
+      "offset_hex": "0x38",
+      "offset_dec": 56,
+      "size": 8,
+      "kernel_name": "flags",
+      "kernel_type": "__le64",
+      "doc": "Superblock flags"
+    },
+    {
+      "offset_hex": "0x40",
+      "offset_dec": 64,
+      "size": 8,
+      "kernel_name": "magic",
+      "kernel_type": "__le64",
+      "doc": "Magic (_BHRfS_M)"
+    },
+    {
+      "offset_hex": "0x48",
+      "offset_dec": 72,
+      "size": 8,
+      "kernel_name": "generation",
+      "kernel_type": "__le64",
+      "doc": "Transaction ID"
+    },
+    {
+      "offset_hex": "0x50",
+      "offset_dec": 80,
+      "size": 8,
+      "kernel_name": "root",
+      "kernel_type": "__le64",
+      "doc": "Root tree root"
+    },
+    {
+      "offset_hex": "0x58",
+      "offset_dec": 88,
+      "size": 8,
+      "kernel_name": "chunk_root",
+      "kernel_type": "__le64",
+      "doc": "Chunk tree root"
+    },
+    {
+      "offset_hex": "0x60",
+      "offset_dec": 96,
+      "size": 8,
+      "kernel_name": "log_root",
+      "kernel_type": "__le64",
+      "doc": "Log tree root"
+    },
+    {
+      "offset_hex": "0x68",
+      "offset_dec": 104,
+      "size": 8,
+      "kernel_name": "log_root_transid",
+      "kernel_type": "__le64",
+      "doc": "Log root transaction ID"
+    },
+    {
+      "offset_hex": "0x70",
+      "offset_dec": 112,
+      "size": 8,
+      "kernel_name": "total_bytes",
+      "kernel_type": "__le64",
+      "doc": "Total FS size in bytes"
+    },
+    {
+      "offset_hex": "0x78",
+      "offset_dec": 120,
+      "size": 8,
+      "kernel_name": "bytes_used",
+      "kernel_type": "__le64",
+      "doc": "Bytes used"
+    },
+    {
+      "offset_hex": "0x80",
+      "offset_dec": 128,
+      "size": 8,
+      "kernel_name": "root_dir_objectid",
+      "kernel_type": "__le64",
+      "doc": "Root dir objectid"
+    },
+    {
+      "offset_hex": "0x88",
+      "offset_dec": 136,
+      "size": 8,
+      "kernel_name": "num_devices",
+      "kernel_type": "__le64",
+      "doc": "Number of devices"
+    },
+    {
+      "offset_hex": "0x90",
+      "offset_dec": 144,
+      "size": 4,
+      "kernel_name": "sectorsize",
+      "kernel_type": "__le32",
+      "doc": "Sector size"
+    },
+    {
+      "offset_hex": "0x94",
+      "offset_dec": 148,
+      "size": 4,
+      "kernel_name": "nodesize",
+      "kernel_type": "__le32",
+      "doc": "Node size"
+    },
+    {
+      "offset_hex": "0x98",
+      "offset_dec": 152,
+      "size": 4,
+      "kernel_name": "leafsize",
+      "kernel_type": "__le32",
+      "doc": "Leaf size (= nodesize)"
+    },
+    {
+      "offset_hex": "0x9C",
+      "offset_dec": 156,
+      "size": 4,
+      "kernel_name": "stripesize",
+      "kernel_type": "__le32",
+      "doc": "Stripe size"
+    },
+    {
+      "offset_hex": "0xA0",
+      "offset_dec": 160,
+      "size": 4,
+      "kernel_name": "sys_chunk_array_size",
+      "kernel_type": "__le32",
+      "doc": "System chunk array size"
+    },
+    {
+      "offset_hex": "0xA4",
+      "offset_dec": 164,
+      "size": 8,
+      "kernel_name": "chunk_root_generation",
+      "kernel_type": "__le64",
+      "doc": "Chunk root generation"
+    },
+    {
+      "offset_hex": "0xAC",
+      "offset_dec": 172,
+      "size": 8,
+      "kernel_name": "compat_flags",
+      "kernel_type": "__le64",
+      "doc": "Compatibility flags"
+    },
+    {
+      "offset_hex": "0xB4",
+      "offset_dec": 180,
+      "size": 8,
+      "kernel_name": "compat_ro_flags",
+      "kernel_type": "__le64",
+      "doc": "Readonly-compatibility flags"
+    },
+    {
+      "offset_hex": "0xBC",
+      "offset_dec": 188,
+      "size": 8,
+      "kernel_name": "incompat_flags",
+      "kernel_type": "__le64",
+      "doc": "Incompatibility flags"
+    },
+    {
+      "offset_hex": "0xC4",
+      "offset_dec": 196,
+      "size": 2,
+      "kernel_name": "csum_type",
+      "kernel_type": "__le16",
+      "doc": "Checksum algorithm type"
+    },
+    {
+      "offset_hex": "0xC6",
+      "offset_dec": 198,
+      "size": 1,
+      "kernel_name": "root_level",
+      "kernel_type": "__u8",
+      "doc": "Tree root level"
+    },
+    {
+      "offset_hex": "0xC7",
+      "offset_dec": 199,
+      "size": 1,
+      "kernel_name": "chunk_root_level",
+      "kernel_type": "__u8",
+      "doc": "Chunk root level"
+    },
+    {
+      "offset_hex": "0xC8",
+      "offset_dec": 200,
+      "size": 1,
+      "kernel_name": "log_root_level",
+      "kernel_type": "__u8",
+      "doc": "Log root level"
+    },
+    {
+      "offset_hex": "0xC9",
+      "offset_dec": 201,
+      "size": 98,
+      "kernel_name": "dev_item",
+      "kernel_type": "btrfs_dev_item",
+      "doc": "Device item"
+    },
+    {
+      "offset_hex": "0x12B",
+      "offset_dec": 299,
+      "size": 256,
+      "kernel_name": "label",
+      "kernel_type": "__u8[256]",
+      "doc": "Volume label"
+    },
+    {
+      "offset_hex": "0x22B",
+      "offset_dec": 555,
+      "size": 8,
+      "kernel_name": "cache_generation",
+      "kernel_type": "__le64",
+      "doc": "Cache generation"
+    },
+    {
+      "offset_hex": "0x233",
+      "offset_dec": 563,
+      "size": 8,
+      "kernel_name": "uuid_tree_generation",
+      "kernel_type": "__le64",
+      "doc": "UUID tree generation"
+    },
+    {
+      "offset_hex": "0x23B",
+      "offset_dec": 571,
+      "size": 8,
+      "kernel_name": "block_group_root_use",
+      "kernel_type": "__le64",
+      "doc": "Block group root usage"
+    },
+    {
+      "offset_hex": "0x243",
+      "offset_dec": 579,
+      "size": 8,
+      "kernel_name": "nr_global_roots",
+      "kernel_type": "__le64",
+      "doc": "Number of global roots"
+    },
+    {
+      "offset_hex": "0x24B",
+      "offset_dec": 587,
+      "size": 8,
+      "kernel_name": "metadata_uuid",
+      "kernel_type": "__u8[16]",
+      "doc": "Metadata UUID (optional)"
+    },
+    {
+      "offset_hex": "0x25B",
+      "offset_dec": 603,
+      "size": 3493,
+      "kernel_name": "reserved",
+      "kernel_type": "__u8[3493]",
+      "doc": "Padding to 4096 bytes"
+    }
+  ],
+  "feature_bitmask_mapping": [
+    {
+      "category": "COMPAT_RO",
+      "disk_field": "compat_ro_flags",
+      "kernel_func": "btrfs_super_compat_ro_flags",
+      "bitmask_hex": "0x0001",
+      "bitmask_value": 1,
+      "macro_name": "BTRFS_FEATURE_COMPAT_RO_FREE_SPACE_TREE"
+    },
+    {
+      "category": "COMPAT_RO",
+      "disk_field": "compat_ro_flags",
+      "kernel_func": "btrfs_super_compat_ro_flags",
+      "bitmask_hex": "0x0002",
+      "bitmask_value": 2,
+      "macro_name": "BTRFS_FEATURE_COMPAT_RO_FREE_SPACE_TREE_VALID"
+    },
+    {
+      "category": "COMPAT_RO",
+      "disk_field": "compat_ro_flags",
+      "kernel_func": "btrfs_super_compat_ro_flags",
+      "bitmask_hex": "0x0008",
+      "bitmask_value": 8,
+      "macro_name": "BTRFS_FEATURE_COMPAT_RO_BLOCK_GROUP_TREE"
+    },
+    {
+      "category": "INCOMPAT",
+      "disk_field": "incompat_flags",
+      "kernel_func": "btrfs_super_incompat_flags",
+      "bitmask_hex": "0x0001",
+      "bitmask_value": 1,
+      "macro_name": "BTRFS_FEATURE_INCOMPAT_MIXED_BACKREF"
+    },
+    {
+      "category": "INCOMPAT",
+      "disk_field": "incompat_flags",
+      "kernel_func": "btrfs_super_incompat_flags",
+      "bitmask_hex": "0x0002",
+      "bitmask_value": 2,
+      "macro_name": "BTRFS_FEATURE_INCOMPAT_DEFAULT_SUBVOL"
+    },
+    {
+      "category": "INCOMPAT",
+      "disk_field": "incompat_flags",
+      "kernel_func": "btrfs_super_incompat_flags",
+      "bitmask_hex": "0x0004",
+      "bitmask_value": 4,
+      "macro_name": "BTRFS_FEATURE_INCOMPAT_MIXED_GROUPS"
+    },
+    {
+      "category": "INCOMPAT",
+      "disk_field": "incompat_flags",
+      "kernel_func": "btrfs_super_incompat_flags",
+      "bitmask_hex": "0x0040",
+      "bitmask_value": 64,
+      "macro_name": "BTRFS_FEATURE_INCOMPAT_EXTENDED_IREF"
+    },
+    {
+      "category": "INCOMPAT",
+      "disk_field": "incompat_flags",
+      "kernel_func": "btrfs_super_incompat_flags",
+      "bitmask_hex": "0x0080",
+      "bitmask_value": 128,
+      "macro_name": "BTRFS_FEATURE_INCOMPAT_RAID56"
+    },
+    {
+      "category": "INCOMPAT",
+      "disk_field": "incompat_flags",
+      "kernel_func": "btrfs_super_incompat_flags",
+      "bitmask_hex": "0x0100",
+      "bitmask_value": 256,
+      "macro_name": "BTRFS_FEATURE_INCOMPAT_SKINNY_METADATA"
+    },
+    {
+      "category": "INCOMPAT",
+      "disk_field": "incompat_flags",
+      "kernel_func": "btrfs_super_incompat_flags",
+      "bitmask_hex": "0x0200",
+      "bitmask_value": 512,
+      "macro_name": "BTRFS_FEATURE_INCOMPAT_NO_HOLES"
+    },
+    {
+      "category": "INCOMPAT",
+      "disk_field": "incompat_flags",
+      "kernel_func": "btrfs_super_incompat_flags",
+      "bitmask_hex": "0x0800",
+      "bitmask_value": 2048,
+      "macro_name": "BTRFS_FEATURE_INCOMPAT_RAID1C34"
+    },
+    {
+      "category": "INCOMPAT",
+      "disk_field": "incompat_flags",
+      "kernel_func": "btrfs_super_incompat_flags",
+      "bitmask_hex": "0x1000",
+      "bitmask_value": 4096,
+      "macro_name": "BTRFS_FEATURE_INCOMPAT_ZONED"
+    },
+    {
+      "category": "INCOMPAT",
+      "disk_field": "incompat_flags",
+      "kernel_func": "btrfs_super_incompat_flags",
+      "bitmask_hex": "0x2000",
+      "bitmask_value": 8192,
+      "macro_name": "BTRFS_FEATURE_INCOMPAT_EXTENT_TREE_V2"
+    }
+  ],
+  "disk_to_mem_mappings": [
+    {
+      "disk_field": "disk_super->nodesize",
+      "mem_field": "fs_info->nodesize",
+      "transform": "direct",
+      "detail": "nodesize = btrfs_super_nodesize(disk_super). Accessor: get_unaligned_le32(&s->nodesize)"
+    },
+    {
+      "disk_field": "disk_super->sectorsize",
+      "mem_field": "fs_info->sectorsize",
+      "transform": "direct",
+      "detail": "fs_info->sectorsize = btrfs_super_sectorsize(disk_super). Accessor: get_unaligned_le32"
+    },
+    {
+      "disk_field": "(derived)",
+      "mem_field": "fs_info->sectorsize_bits",
+      "transform": "log2_scale",
+      "detail": "fs_info->sectorsize_bits = ilog2(sectorsize)"
+    },
+    {
+      "disk_field": "disk_super->csum_type",
+      "mem_field": "fs_info->csum_size",
+      "transform": "conditional",
+      "detail": "csum_type = btrfs_super_csum_type(disk_super); validated; fs_info->csum_size = btrfs_super_csum_size(disk_super)"
+    },
+    {
+      "disk_field": "(derived)",
+      "mem_field": "fs_info->csums_per_leaf",
+      "transform": "computed",
+      "detail": "csums_per_leaf = BTRFS_MAX_ITEM_SIZE(nodesize) / csum_size"
+    },
+    {
+      "disk_field": "disk_super->flags",
+      "mem_field": "fs_info->fs_error",
+      "transform": "conditional",
+      "detail": "if (btrfs_super_flags & BTRFS_SUPER_FLAG_ERROR) fs_error = -EUCLEAN"
+    },
+    {
+      "disk_field": "disk_super->num_devices",
+      "mem_field": "sb->s_bdi->ra_pages",
+      "transform": "computed",
+      "detail": "sb->s_bdi->ra_pages *= btrfs_super_num_devices(disk_super). Accessor: get_unaligned_le64"
+    },
+    {
+      "disk_field": "(derived)",
+      "mem_field": "sb->s_blocksize",
+      "transform": "direct",
+      "detail": "sb->s_blocksize = sectorsize"
+    },
+    {
+      "disk_field": "(derived)",
+      "mem_field": "sb->s_blocksize_bits",
+      "transform": "log2_scale",
+      "detail": "sb->s_blocksize_bits = blksize_bits(sectorsize)"
+    },
+    {
+      "disk_field": "disk_super->fsid",
+      "mem_field": "sb->s_uuid",
+      "transform": "direct",
+      "detail": "memcpy(&sb->s_uuid, fs_info->fs_devices->fsid, BTRFS_FSID_SIZE)"
+    },
+    {
+      "disk_field": "disk_super (full)",
+      "mem_field": "fs_info->super_copy",
+      "transform": "direct",
+      "detail": "memcpy(fs_info->super_copy, disk_super, sizeof(*super_copy)). Full superblock preserved in memory"
+    }
+  ],
+  "confd_to_superblock": [
+    {
+      "confd_param": "nodesize",
+      "confd_variable": "nodesize",
+      "disk_field": "nodesize",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "fs_info->nodesize",
+      "transform": "direct",
+      "note": "stored as le32; default 16384 on x86_64",
+      "formula": "nodesize := user_value",
+      "embedded_struct_type": "struct.btrfs_super_block",
+      "embedded_field_offset": 148,
+      "mkfs_flag": "-n"
+    },
+    {
+      "confd_param": "sectorsize",
+      "confd_variable": "sectorsize",
+      "disk_field": "sectorsize",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "fs_info->sectorsize",
+      "transform": "direct",
+      "note": "stored as le32; default 4096",
+      "formula": "sectorsize := user_value",
+      "embedded_struct_type": "struct.btrfs_super_block",
+      "embedded_field_offset": 144,
+      "mkfs_flag": "-s"
+    },
+    {
+      "confd_param": "stripesize",
+      "confd_variable": "stripesize",
+      "disk_field": "stripesize",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "fs_info->stripesize",
+      "transform": "direct",
+      "note": "stored as le32; defaults to sectorsize",
+      "embedded_struct_type": "struct.btrfs_super_block",
+      "embedded_field_offset": 156,
+      "mkfs_flag": ""
+    },
+    {
+      "confd_param": "leaf_data_size",
+      "confd_variable": "leaf_data_size",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "computed",
+      "note": "computed: nodesize - sizeof(btrfs_header)",
+      "formula": "leaf_data_size := nodesize - sizeof(btrfs_header)",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": ""
+    },
+    {
+      "confd_param": "byte_count",
+      "confd_variable": "num_bytes",
+      "disk_field": "total_bytes",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "fs_info->super_copy->total_bytes",
+      "transform": "direct",
+      "note": "-b/--byte-count: stored as le64 total_bytes",
+      "formula": "total_bytes := user_value",
+      "embedded_struct_type": "struct.btrfs_super_block",
+      "embedded_field_offset": 112,
+      "mkfs_flag": "-b"
+    },
+    {
+      "confd_param": "csum",
+      "confd_variable": "csum_type",
+      "disk_field": "csum_type",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "fs_info->csum_size",
+      "transform": "conditional",
+      "note": "--csum: 0=crc32c, 1=xxhash, 2=sha256, 3=blake2; csum_size derived from type",
+      "formula": "csum_type := user_value",
+      "embedded_struct_type": "struct.btrfs_super_block",
+      "embedded_field_offset": 196,
+      "mkfs_flag": "--csum"
+    },
+    {
+      "confd_param": "zone_size",
+      "confd_variable": "zone_size",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "computed",
+      "note": "computed from zoned device geometry; not directly stored",
+      "formula": "zone_size := computed from zoned device geometry; not directly stored",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": ""
+    },
+    {
+      "confd_param": "metadata",
+      "confd_variable": "metadata_profile",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "note": "-m/--metadata: stored in chunk tree items, not superblock",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": "-m"
+    },
+    {
+      "confd_param": "data",
+      "confd_variable": "data_profile",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "note": "-d/--data: stored in chunk tree items, not superblock",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": "-d"
+    },
+    {
+      "confd_param": "mixed",
+      "confd_variable": "mixed",
+      "disk_field": "incompat_flags",
+      "bitmask_hex": "0x0004",
+      "bitmask_value": 4,
+      "kernel_func": "btrfs_super_incompat_flags",
+      "kernel_mem_field": "fs_info->super_copy->incompat_flags",
+      "transform": "bitmask_check",
+      "note": "-M/--mixed: sets BTRFS_FEATURE_INCOMPAT_MIXED_GROUPS (bit 2)",
+      "formula": "incompat_flags := incompat_flags OR 0x0004",
+      "embedded_struct_type": "struct.btrfs_super_block",
+      "embedded_field_offset": 188,
+      "mkfs_flag": "-M"
+    },
+    {
+      "confd_param": "num_global_roots",
+      "confd_variable": "nr_global_roots",
+      "disk_field": "nr_global_roots",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "fs_info->super_copy->nr_global_roots",
+      "transform": "direct",
+      "note": "stored as le64; newer field",
+      "embedded_struct_type": "struct.btrfs_super_block",
+      "embedded_field_offset": 579,
+      "mkfs_flag": "--num-global-roots"
+    },
+    {
+      "confd_param": "label",
+      "confd_variable": "label",
+      "disk_field": "label",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "fs_info->super_copy->label",
+      "transform": "direct",
+      "note": "-L/--label: max 256 bytes",
+      "embedded_struct_type": "struct.btrfs_super_block",
+      "embedded_field_offset": 299,
+      "mkfs_flag": "-L"
+    },
+    {
+      "confd_param": "rootdir",
+      "confd_variable": "source_dir",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "note": "-r/--rootdir: directory content populated into FS",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": "-r"
+    },
+    {
+      "confd_param": "uuid",
+      "confd_variable": "fs_uuid",
+      "disk_field": "fsid",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "sb->s_uuid",
+      "transform": "direct",
+      "note": "-U/--uuid: 16 bytes UUID",
+      "embedded_struct_type": "struct.super_block",
+      "embedded_field_offset": 32,
+      "mkfs_flag": "-U"
+    },
+    {
+      "confd_param": "device_uuid",
+      "confd_variable": "dev_uuid",
+      "disk_field": "(dev_item.uuid)",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "direct",
+      "note": "stored inside embedded btrfs_dev_item.device_uuid, not top-level",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": "--device-uuid"
+    },
+    {
+      "confd_param": "features",
+      "confd_variable": "features",
+      "disk_field": "compat_flags+ro_flags+incompat_flags",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": "fs_info->super_copy->{compat_flags, compat_ro_flags, incompat_flags}",
+      "transform": "bitmask_check",
+      "note": "-O: composite bitmask set across compat/compat_ro/incompat flags",
+      "formula": "compat_flags/ro_flags/incompat_flags := composite OR from -O",
+      "embedded_struct_type": "struct.btrfs_super_block",
+      "embedded_field_offset": 172,
+      "mkfs_flag": "-O"
+    },
+    {
+      "confd_param": "discard",
+      "confd_variable": "opt_discard",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "note": "-K/--nodiscard: disable trim/discard during mkfs",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": "-K"
+    },
+    {
+      "confd_param": "zoned",
+      "confd_variable": "opt_zoned",
+      "disk_field": "incompat_flags",
+      "bitmask_hex": "0x1000",
+      "bitmask_value": 4096,
+      "kernel_func": "btrfs_super_incompat_flags",
+      "kernel_mem_field": "fs_info->super_copy->incompat_flags",
+      "transform": "bitmask_check",
+      "note": "auto-detected from zoned device; sets BTRFS_FEATURE_INCOMPAT_ZONED (bit 12)",
+      "formula": "incompat_flags := incompat_flags OR 0x1000",
+      "embedded_struct_type": "struct.btrfs_super_block",
+      "embedded_field_offset": 188,
+      "mkfs_flag": ""
+    },
+    {
+      "confd_param": "force_overwrite",
+      "confd_variable": "force_overwrite",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "note": "-f/--force: overwrite existing FS",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": "-f"
+    },
+    {
+      "confd_param": "shrink",
+      "confd_variable": "shrink_rootdir",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "note": "--shrink: shrink root directory",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": "--shrink"
+    },
+    {
+      "confd_param": "nodesize_forced",
+      "confd_variable": "nodesize_forced",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "note": "internal flag: nodesize was explicitly given via -n",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": ""
+    },
+    {
+      "confd_param": "subvol",
+      "confd_variable": "subvol",
+      "disk_field": "incompat_flags",
+      "bitmask_hex": "0x0002",
+      "bitmask_value": 2,
+      "kernel_func": "btrfs_super_incompat_flags",
+      "kernel_mem_field": "fs_info->super_copy->incompat_flags",
+      "transform": "bitmask_check",
+      "mkfs_flag": "-u",
+      "formula": "incompat_flags := incompat_flags OR 0x0002 (if default subvol specified)",
+      "embedded_struct_type": "struct.btrfs_super_block",
+      "embedded_field_offset": 188
+    }
+  ],
+  "usage_notes": {
+    "general_mechanism": "mkfs.btrfs writes parameters to the on-disk btrfs_super_block via btrfs_set_super_xxx() accessor functions. The kernel copies the entire superblock into fs_info->super_copy at mount time.",
+    "accessor_pattern": "btrfs uses get_unaligned_le<bits>(&s->member) accessor macros throughout. Both mkfs and kernel use btrfs_set/get_super_xxx() wrappers generated by BTRFS_SETGET_STACK_FUNCS macros.",
+    "dev_item_uuid": "dev_uuid is written to the embedded btrfs_dev_item struct at offset 0xC9, not as a top-level superblock field.",
+    "chunk_tree_profiles": "metadata_profile and data_profile are NOT stored in the superblock. They affect chunk tree item creation during mkfs and are read from chunk tree at mount.",
+    "full_super_copy": "The kernel does a full memcpy of the superblock to fs_info->super_copy and works from that copy. All bitmask checks go through accessor functions, not direct field access.",
+    "compat_empty": "The compat_flags field currently has no defined feature bits — reserved for future use."
+  }
+}

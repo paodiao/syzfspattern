@@ -1,0 +1,555 @@
+{
+  "meta": {
+    "description": "Superblock field mapping for ntfs3: kernel (6.12) → mkntfs (ntfsprogs-plus) → ConfD mkntfs_constraints",
+    "struct_mkfs": "struct mkntfs_options (mkfs in-memory config)",
+    "struct_disk": "struct NTFS_BOOT (on-disk, 512 bytes = 1 sector)",
+    "struct_mem": "struct ntfs_sb_info (kernel in-memory)",
+    "sources": {
+      "kernel_ntfs_h": "fssourcecode612/ntfs3/ntfs.h:192",
+      "kernel_ntfs_fs_h": "fssourcecode612/ntfs3/ntfs_fs.h:210",
+      "kernel_super_c": "fssourcecode612/ntfs3/super.c (ntfs_fill_super, ntfs_init_from_boot)",
+      "confd_constraints": "ConfD-core/Taint_Analyzer/mkntfs_constraints.json"
+    }
+  },
+  "superblock_field_layout": [
+    {
+      "offset_hex": "0x0",
+      "offset_dec": 0,
+      "size": 3,
+      "kernel_name": "jump",
+      "kernel_type": "__u8[3]",
+      "doc": "JMP instruction (0xEB 0x52 0x90)"
+    },
+    {
+      "offset_hex": "0x3",
+      "offset_dec": 3,
+      "size": 8,
+      "kernel_name": "oem_id",
+      "kernel_type": "char[8]",
+      "doc": "OEM ID ('NTFS    ')"
+    },
+    {
+      "offset_hex": "0xB",
+      "offset_dec": 11,
+      "size": 2,
+      "kernel_name": "bytes_per_sector",
+      "kernel_type": "__u8[2]",
+      "doc": "Bytes per sector (raw 2-byte LE encoding)"
+    },
+    {
+      "offset_hex": "0xD",
+      "offset_dec": 13,
+      "size": 1,
+      "kernel_name": "sectors_per_clusters",
+      "kernel_type": "__s8",
+      "doc": "Sectors per cluster (signed byte encoding: >=0→value, <0→1<<(-value))"
+    },
+    {
+      "offset_hex": "0xE",
+      "offset_dec": 14,
+      "size": 2,
+      "kernel_name": "reserved_sectors",
+      "kernel_type": "__le16",
+      "doc": "Reserved sectors before first FAT"
+    },
+    {
+      "offset_hex": "0x10",
+      "offset_dec": 16,
+      "size": 3,
+      "kernel_name": "fats",
+      "kernel_type": "__u8[3]",
+      "doc": "Number of FATs (always 0)"
+    },
+    {
+      "offset_hex": "0x13",
+      "offset_dec": 19,
+      "size": 2,
+      "kernel_name": "root_entries",
+      "kernel_type": "__le16",
+      "doc": "Root directory entries (always 0 for NTFS)"
+    },
+    {
+      "offset_hex": "0x15",
+      "offset_dec": 21,
+      "size": 2,
+      "kernel_name": "sectors",
+      "kernel_type": "__le16",
+      "doc": "Total sectors (LE16, 0 if >65535)"
+    },
+    {
+      "offset_hex": "0x17",
+      "offset_dec": 23,
+      "size": 1,
+      "kernel_name": "media",
+      "kernel_type": "__u8",
+      "doc": "Media descriptor (0xF8 for HDD)"
+    },
+    {
+      "offset_hex": "0x18",
+      "offset_dec": 24,
+      "size": 2,
+      "kernel_name": "sectors_per_fat",
+      "kernel_type": "__le16",
+      "doc": "Sectors per FAT (always 0 for NTFS)"
+    },
+    {
+      "offset_hex": "0x1A",
+      "offset_dec": 26,
+      "size": 2,
+      "kernel_name": "sct_per_track",
+      "kernel_type": "__le16",
+      "doc": "Sectors per track (CHS geometry)"
+    },
+    {
+      "offset_hex": "0x1C",
+      "offset_dec": 28,
+      "size": 2,
+      "kernel_name": "heads",
+      "kernel_type": "__le16",
+      "doc": "Number of heads (CHS geometry)"
+    },
+    {
+      "offset_hex": "0x1E",
+      "offset_dec": 30,
+      "size": 4,
+      "kernel_name": "hidden_sectors",
+      "kernel_type": "__le32",
+      "doc": "Hidden sectors before partition"
+    },
+    {
+      "offset_hex": "0x22",
+      "offset_dec": 34,
+      "size": 4,
+      "kernel_name": "sectors_per_volume",
+      "kernel_type": "__le32",
+      "doc": "Total sectors (LE32 if <4G)"
+    },
+    {
+      "offset_hex": "0x26",
+      "offset_dec": 38,
+      "size": 4,
+      "kernel_name": "large_sectors",
+      "kernel_type": "__le32",
+      "doc": "Total sectors (LE32 high)"
+    },
+    {
+      "offset_hex": "0x28",
+      "offset_dec": 40,
+      "size": 8,
+      "kernel_name": "sectors_per_volume_fl",
+      "kernel_type": "__le64",
+      "doc": "Total sectors (LE64, used if LE16=0)"
+    },
+    {
+      "offset_hex": "0x30",
+      "offset_dec": 48,
+      "size": 8,
+      "kernel_name": "mft_clst",
+      "kernel_type": "__le64",
+      "doc": "MFT first cluster"
+    },
+    {
+      "offset_hex": "0x38",
+      "offset_dec": 56,
+      "size": 8,
+      "kernel_name": "mft2_clst",
+      "kernel_type": "__le64",
+      "doc": "MFT mirror first cluster"
+    },
+    {
+      "offset_hex": "0x40",
+      "offset_dec": 64,
+      "size": 1,
+      "kernel_name": "record_size",
+      "kernel_type": "__s8",
+      "doc": "MFT record size (signed byte: >=0→clusters, <0→2^abs(value))"
+    },
+    {
+      "offset_hex": "0x44",
+      "offset_dec": 68,
+      "size": 4,
+      "kernel_name": "index_size",
+      "kernel_type": "__le32",
+      "doc": "Index buffer size"
+    },
+    {
+      "offset_hex": "0x48",
+      "offset_dec": 72,
+      "size": 8,
+      "kernel_name": "serial_num",
+      "kernel_type": "__le64",
+      "doc": "Volume serial number"
+    },
+    {
+      "offset_hex": "0x50",
+      "offset_dec": 80,
+      "size": 4,
+      "kernel_name": "checksum",
+      "kernel_type": "__u32",
+      "doc": "Checksum of boot sector"
+    }
+  ],
+  "feature_bitmask_mapping": [],
+  "disk_to_mem_mappings": [
+    {
+      "disk_field": "boot->bytes_per_sector[0..1]",
+      "mem_field": "boot_sector_size",
+      "transform": "direct",
+      "detail": "u32 boot_sector_size = ((u32)boot->bytes_per_sector[1]<<8) | boot->bytes_per_sector[0]"
+    },
+    {
+      "disk_field": "boot->sectors_per_clusters",
+      "mem_field": "sct_per_clst",
+      "transform": "conditional",
+      "detail": "if val <= 0x80 → val; else → 1U << (-(s8)val). Signed-byte: positive = direct, negative = power-of-2"
+    },
+    {
+      "disk_field": "(derived)",
+      "mem_field": "sbi->cluster_size",
+      "transform": "computed",
+      "detail": "sbi->cluster_size = boot_sector_size * sct_per_clst"
+    },
+    {
+      "disk_field": "(derived)",
+      "mem_field": "sbi->cluster_bits",
+      "transform": "log2_scale",
+      "detail": "sbi->cluster_bits = blksize_bits(cluster_size)"
+    },
+    {
+      "disk_field": "(derived)",
+      "mem_field": "sbi->cluster_mask",
+      "transform": "computed",
+      "detail": "sbi->cluster_mask = cluster_size - 1"
+    },
+    {
+      "disk_field": "boot->record_size",
+      "mem_field": "sbi->record_size",
+      "transform": "conditional",
+      "detail": "if recsize >= 0: recsize << cluster_bits; else: 1 << (-recsize). Signed-byte."
+    },
+    {
+      "disk_field": "(derived)",
+      "mem_field": "sbi->record_bits",
+      "transform": "log2_scale",
+      "detail": "sbi->record_bits = blksize_bits(record_size)"
+    },
+    {
+      "disk_field": "boot->index_size",
+      "mem_field": "sbi->index_size",
+      "transform": "conditional",
+      "detail": "Same signed-byte logic: pos → clusters<<bits, neg → 1<<(-val)"
+    },
+    {
+      "disk_field": "boot->mft_clst",
+      "mem_field": "sbi->mft.lbo",
+      "transform": "computed",
+      "detail": "sbi->mft.lbo = le64_to_cpu(boot->mft_clst) << cluster_bits"
+    },
+    {
+      "disk_field": "boot->mft2_clst",
+      "mem_field": "sbi->mft.lbo2",
+      "transform": "computed",
+      "detail": "sbi->mft.lbo2 = le64_to_cpu(boot->mft2_clst) << cluster_bits"
+    },
+    {
+      "disk_field": "boot->sectors_per_volume",
+      "mem_field": "sbi->volume.size",
+      "transform": "computed",
+      "detail": "sbi->volume.size = le64_to_cpu(boot->sectors_per_volume) * boot_sector_size"
+    },
+    {
+      "disk_field": "boot->serial_num",
+      "mem_field": "sbi->volume.ser_num",
+      "transform": "direct",
+      "detail": "sbi->volume.ser_num = le64_to_cpu(boot->serial_num)"
+    },
+    {
+      "disk_field": "(derived)",
+      "mem_field": "sbi->max_bytes_per_attr",
+      "transform": "computed",
+      "detail": "record_size - ALIGN(MFTRECORD_FIXUP_OFFSET,8) - ALIGN((record_size>>SECTOR_SHIFT)*2,8) - ALIGN(sizeof(u32),8)"
+    },
+    {
+      "disk_field": "(derived)",
+      "mem_field": "sbi->blocks_per_cluster",
+      "transform": "log2_scale",
+      "detail": "sbi->blocks_per_cluster = cluster_size >> sb->s_blocksize_bits"
+    },
+    {
+      "disk_field": "(derived)",
+      "mem_field": "sbi->maxbytes",
+      "transform": "computed",
+      "detail": "sbi->maxbytes = (clusters << cluster_bits) - 1"
+    },
+    {
+      "disk_field": "(derived)",
+      "mem_field": "sbi->used.bitmap.nbits",
+      "transform": "computed",
+      "detail": "sbi->used.bitmap.nbits = volume.size >> cluster_bits"
+    }
+  ],
+  "confd_to_superblock": [
+    {
+      "confd_param": "cluster_size",
+      "confd_variable": "cluster_size",
+      "disk_field": "sectors_per_clusters",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "conditional",
+      "note": "signed byte encoding in boot sector; kernel: cluster_size = sector_size * val",
+      "formula": "sectors_per_clusters := if user_value >= 0 then user_value else 1 << (-user_value)",
+      "embedded_struct_type": "struct.ntfs_sb_info",
+      "embedded_field_offset": 13,
+      "mkfs_flag": "-c"
+    },
+    {
+      "confd_param": "enable_compression",
+      "confd_variable": "enable_compression",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "note": "sets FILE_ATTRIBUTE_COMPRESSED allowed on volume",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": "-C"
+    },
+    {
+      "confd_param": "fast_format",
+      "confd_variable": "quick_format",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "note": "quick format: skip zeroing/verify",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": "-f"
+    },
+    {
+      "confd_param": "force",
+      "confd_variable": "force",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "note": "force format even if volume appears in use",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": "-F"
+    },
+    {
+      "confd_param": "heads",
+      "confd_variable": "heads",
+      "disk_field": "heads",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "direct",
+      "note": "CHS geometry parameter; stored in BPB",
+      "embedded_struct_type": "struct.ntfs_sb_info",
+      "embedded_field_offset": 26,
+      "mkfs_flag": "-H"
+    },
+    {
+      "confd_param": "no_indexing",
+      "confd_variable": "disable_indexing",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "note": "sets FILE_ATTRIBUTE_NOT_CONTENT_INDEXED on root",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": "-I"
+    },
+    {
+      "confd_param": "label",
+      "confd_variable": "label",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "note": "stored in $Volume attribute (MFT record 3), NOT in boot sector",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": "-L"
+    },
+    {
+      "confd_param": "no_action",
+      "confd_variable": "no_action",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "note": "dry run, no actual write",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": "-n"
+    },
+    {
+      "confd_param": "partition_start",
+      "confd_variable": "part_start_sect",
+      "disk_field": "hidden_sectors",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "direct",
+      "note": "partition offset in sectors",
+      "embedded_struct_type": "struct.ntfs_sb_info",
+      "embedded_field_offset": 28,
+      "mkfs_flag": "-p"
+    },
+    {
+      "confd_param": "sector_size",
+      "confd_variable": "sector_size",
+      "disk_field": "bytes_per_sector",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "conditional",
+      "note": "raw 2-byte LE: byte[0]=0, byte[1]=sector_size/256",
+      "formula": "bytes_per_sector := user_value / 256 (stored as raw LE bytes)",
+      "embedded_struct_type": "struct.ntfs_sb_info",
+      "embedded_field_offset": 11,
+      "mkfs_flag": "-s"
+    },
+    {
+      "confd_param": "sectors_per_track",
+      "confd_variable": "sectors_per_track",
+      "disk_field": "sct_per_track",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "direct",
+      "note": "CHS geometry parameter",
+      "embedded_struct_type": "struct.ntfs_sb_info",
+      "embedded_field_offset": 24,
+      "mkfs_flag": "-S"
+    },
+    {
+      "confd_param": "zero_time",
+      "confd_variable": "use_epoch_time",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "note": "sets all timestamps to 0/NT epoch",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": "-T"
+    },
+    {
+      "confd_param": "full_format",
+      "confd_variable": "quick_format62",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "note": "full (non-quick) format",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": "-u"
+    },
+    {
+      "confd_param": "mft_zone_multiplier",
+      "confd_variable": "mft_zone_multiplier",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "note": "MFT zone reservation multiplier; affects initial layout only",
+      "embedded_struct_type": null,
+      "embedded_field_offset": null,
+      "mkfs_flag": "-z"
+    },
+    {
+      "confd_param": "with_uuid",
+      "confd_variable": "with_uuid",
+      "disk_field": "serial_num",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "direct",
+      "note": "if enabled, serial_num = random bytes (GUID-based)",
+      "embedded_struct_type": "struct.ntfs_sb_info",
+      "embedded_field_offset": 72,
+      "mkfs_flag": "-U"
+    },
+    {
+      "confd_param": "dev_name",
+      "confd_variable": "dev_name",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mkfs_flag": "",
+      "formula": null,
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    },
+    {
+      "confd_param": "num_sectors",
+      "confd_variable": "num_sectors",
+      "disk_field": "sectors_per_volume_fl",
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "computed",
+      "mkfs_flag": "",
+      "formula": "sectors_per_volume_fl := user_value; kernel: volume.size = sectors * sector_size",
+      "embedded_struct_type": "struct.NTFS_BOOT",
+      "embedded_field_offset": 40
+    },
+    {
+      "confd_param": "quick_format",
+      "confd_variable": "quick_format",
+      "disk_field": null,
+      "bitmask_hex": null,
+      "bitmask_value": null,
+      "kernel_func": null,
+      "kernel_mem_field": null,
+      "transform": "runtime_only",
+      "mkfs_flag": "-Q",
+      "formula": null,
+      "embedded_struct_type": null,
+      "embedded_field_offset": null
+    }
+  ],
+  "usage_notes": {
+    "general_mechanism": "mkntfs writes user-input parameters to an NTFS boot sector (struct NTFS_BOOT, 512 bytes). Most parameters are runtime-only flags affecting format behavior.",
+    "struct_note": "The mkfs JSON declares 'struct.mkntfs_options' (mkfs in-memory config). kernel struct is 'struct NTFS_BOOT' (on-disk) and 'struct ntfs_sb_info' (in-memory).",
+    "volume_label_storage": "Volume label is NOT in NTFS_BOOT. It is stored in the $Volume NTFS metadata file (MFT record 3) in an ATTR_LABEL attribute.",
+    "signed_byte_encoding": "sectors_per_clusters and record_size use signed byte: value >= 0 means direct value; value < 0 means 1 << abs(value). e.g. -10 in record_size means record_size = 1024 bytes.",
+    "sector_size_quirks": "bytes_per_sector is stored as 2 raw bytes in LE order, NOT a standard le16 type. byte[0] must be 0, byte[1] = sector_size / 256.",
+    "runtime_heavy": "11 of 17 parameters are runtime_only — most ntfs3 mkfs flags control formatting behavior rather than on-disk data."
+  }
+}
