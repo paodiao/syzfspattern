@@ -1,0 +1,21 @@
+{
+    "blocksize": 4096,
+    "inode_size": 256,
+    "inode_ratio": 16384,
+    "64bit": "enable",
+    "dir_index": "enable",
+    "dir_nlink": "enable",
+    "ext_attr": "enable",
+    "extents": "enable",
+    "extra_isize": "enable",
+    "filetype": "enable",
+    "flex_bg": "enable",
+    "has_journal": "enable",
+    "huge_file": "enable",
+    "large_file": "enable",
+    "metadata_csum": "enable",
+    "metadata_csum_seed": "enable",
+    "orphan_file": "enable",
+    "resize_inode": "enable",
+    "sparse_super": "enable"
+}

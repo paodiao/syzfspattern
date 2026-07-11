@@ -1,0 +1,7 @@
+{
+    "segs_per_sec": 1,
+    "overprovision": 5.0,
+    "heap": 0,
+    "trim": 1,
+    "wanted_sector_size": -1
+}

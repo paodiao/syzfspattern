@@ -1,0 +1,116 @@
+{
+  "function_name": "main",
+  "superblock": "%struct.NTFS_BOOT_SECTOR",
+  "parameters": {
+    "cluster_size": {
+      "id": 1,
+      "variable": "cluster_size",
+      "flag": "-c",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "enable_compression": {
+      "id": 2,
+      "variable": "enable_compression",
+      "flag": "-C",
+      "value_type": null,
+      "takes_value": "flag_only",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "heads": {
+      "id": 5,
+      "variable": "heads",
+      "flag": "-H",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "no_indexing": {
+      "id": 6,
+      "variable": "disable_indexing",
+      "flag": "-I",
+      "value_type": null,
+      "takes_value": "flag_only",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "partition_start": {
+      "id": 9,
+      "variable": "part_start_sect",
+      "flag": "-p",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "sector_size": {
+      "id": 11,
+      "variable": "sector_size",
+      "flag": "-s",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "sectors_per_track": {
+      "id": 12,
+      "variable": "sectors_per_track",
+      "flag": "-S",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "mft_zone_multiplier": {
+      "id": 16,
+      "variable": "mft_zone_multiplier",
+      "flag": "-z",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "with_uuid": {
+      "id": 17,
+      "variable": "with_uuid",
+      "flag": "-U",
+      "value_type": null,
+      "takes_value": "flag_only",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "num_sectors": {
+      "id": 20,
+      "variable": "num_sectors",
+      "flag": "",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    }
+  }
+}

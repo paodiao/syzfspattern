@@ -1,0 +1,12 @@
+{
+    "blocksize": 4096,
+    "sectorsize": 512,
+    "inodesize": 512,
+    "crc": 1,
+    "finobt": 1,
+    "sparse": 1,
+    "bigtime": 1,
+    "inobtcount": 1,
+    "rmapbt": 0,
+    "reflink": 0
+}

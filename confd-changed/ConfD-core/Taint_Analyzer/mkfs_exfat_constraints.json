@@ -1,0 +1,116 @@
+{
+    "function_name": "main",
+    "superblock": "%struct.exfat_user_input",
+    "parameters": {
+        "sector_size": {
+            "id": 1,
+            "variable": "sector_size",
+            "flag": "-s",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "cluster_size": {
+            "id": 2,
+            "variable": "cluster_size",
+            "flag": "-c",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "boundary_align": {
+            "id": 3,
+            "variable": "boundary_align",
+            "flag": "-b",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "volume_label": {
+            "id": 4,
+            "variable": "volume_label",
+            "flag": "-L",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "volume_guid": {
+            "id": 5,
+            "variable": "volume_guid",
+            "flag": "-U",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "pack_bitmap": {
+            "id": 6,
+            "variable": "pack_bitmap",
+            "flag": "--pack-bitmap",
+            "value_type": null,
+            "takes_value": "no",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "full_format": {
+            "id": 7,
+            "variable": "quick",
+            "flag": "-f",
+            "value_type": null,
+            "takes_value": "no",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "check_written": {
+            "id": 8,
+            "variable": "verify",
+            "flag": "-C",
+            "value_type": null,
+            "takes_value": "no",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "no_discard": {
+            "id": 9,
+            "variable": "discard",
+            "flag": "-K",
+            "value_type": null,
+            "takes_value": "no",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "zero_out": {
+            "id": 10,
+            "variable": "zero_out",
+            "flag": "",
+            "value_type": null,
+            "takes_value": "no",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        }
+    }
+}

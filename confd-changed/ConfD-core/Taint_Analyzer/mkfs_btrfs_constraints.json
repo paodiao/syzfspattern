@@ -1,0 +1,185 @@
+{
+  "function_name": "main",
+  "superblock": "%struct.btrfs_super_block",
+  "parameters": {
+    "nodesize": {
+      "id": 1,
+      "variable": "nodesize",
+      "flag": "-n",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "sectorsize": {
+      "id": 2,
+      "variable": "sectorsize",
+      "flag": "-s",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [
+        "nodesize"
+      ],
+      "critical": {}
+    },
+    "stripesize": {
+      "id": 3,
+      "variable": "stripesize",
+      "flag": "",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [
+        "sectorsize"
+      ],
+      "critical": {}
+    },
+    "leaf_data_size": {
+      "id": 4,
+      "variable": "leaf_data_size",
+      "flag": "",
+      "value_type": null,
+      "takes_value": "no",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [
+        "nodesize"
+      ],
+      "critical": {}
+    },
+    "zone_size": {
+      "id": 7,
+      "variable": "zone_size",
+      "flag": "",
+      "value_type": null,
+      "takes_value": "no",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "mixed": {
+      "id": 10,
+      "variable": "mixed",
+      "flag": "-M",
+      "value_type": null,
+      "takes_value": "flag_only",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "features": {
+      "id": 16,
+      "variable": "features",
+      "flag": "-O",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [
+        "mixed"
+      ],
+      "critical": {}
+    },
+    "zoned": {
+      "id": 19,
+      "variable": "opt_zoned",
+      "flag": "",
+      "value_type": null,
+      "takes_value": "no",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "nodesize_forced": {
+      "id": 22,
+      "variable": "nodesize_forced",
+      "flag": "",
+      "value_type": null,
+      "takes_value": "no",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [
+        "nodesize"
+      ],
+      "critical": {}
+    },
+    "byte_count": {
+      "id": 5,
+      "variable": "num_bytes",
+      "flag": "-b",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "csum": {
+      "id": 6,
+      "variable": "csum_type",
+      "flag": "--csum",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "metadata": {
+      "id": 8,
+      "variable": "metadata_profile",
+      "flag": "-m",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [
+        "mixed"
+      ],
+      "critical": {}
+    },
+    "data": {
+      "id": 9,
+      "variable": "data_profile",
+      "flag": "-d",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [
+        "mixed"
+      ],
+      "critical": {}
+    },
+    "num_global_roots": {
+      "id": 11,
+      "variable": "nr_global_roots",
+      "flag": "--num-global-roots",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "shrink": {
+      "id": 21,
+      "variable": "shrink_rootdir",
+      "flag": "--shrink",
+      "value_type": null,
+      "takes_value": "no",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    }
+  }
+}

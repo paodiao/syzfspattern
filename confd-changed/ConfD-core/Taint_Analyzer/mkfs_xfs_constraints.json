@@ -1,0 +1,517 @@
+{
+  "function_name": "main",
+  "superblock": "%struct.xfs_sb",
+  "parameters": {
+    "blocksize": {
+      "id": 1,
+      "variable": "blocksize",
+      "flag": "-b",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "blocklog": {
+      "id": 2,
+      "variable": "blocklog",
+      "flag": "",
+      "value_type": null,
+      "takes_value": "no",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [
+        "blocksize"
+      ],
+      "critical": {}
+    },
+    "sectorsize": {
+      "id": 3,
+      "variable": "sectorsize",
+      "flag": "-s",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "sectorlog": {
+      "id": 4,
+      "variable": "sectorlog",
+      "flag": "",
+      "value_type": null,
+      "takes_value": "no",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [
+        "sectorsize"
+      ],
+      "critical": {}
+    },
+    "lsectorsize": {
+      "id": 5,
+      "variable": "lsectorsize",
+      "flag": "-l sectsize",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "lsectorlog": {
+      "id": 6,
+      "variable": "lsectorlog",
+      "flag": "",
+      "value_type": null,
+      "takes_value": "no",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [
+        "lsectorsize"
+      ],
+      "critical": {}
+    },
+    "dirblocksize": {
+      "id": 7,
+      "variable": "dirblocksize",
+      "flag": "-n size",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "dirblocklog": {
+      "id": 8,
+      "variable": "dirblocklog",
+      "flag": "",
+      "value_type": null,
+      "takes_value": "no",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [
+        "dirblocksize"
+      ],
+      "critical": {}
+    },
+    "inodesize": {
+      "id": 9,
+      "variable": "inodesize",
+      "flag": "-i size",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "inodelog": {
+      "id": 10,
+      "variable": "inodelog",
+      "flag": "",
+      "value_type": null,
+      "takes_value": "no",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [
+        "inodesize"
+      ],
+      "critical": {}
+    },
+    "dblocks": {
+      "id": 12,
+      "variable": "dblocks",
+      "flag": "-d size",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "logblocks": {
+      "id": 13,
+      "variable": "logblocks",
+      "flag": "-l size",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "rtblocks": {
+      "id": 14,
+      "variable": "rtblocks",
+      "flag": "-r size",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "rtextblocks": {
+      "id": 15,
+      "variable": "rtextblocks",
+      "flag": "",
+      "value_type": null,
+      "takes_value": "no",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [
+        "rtblocks"
+      ],
+      "critical": {}
+    },
+    "rtextents": {
+      "id": 16,
+      "variable": "rtextents",
+      "flag": "",
+      "value_type": null,
+      "takes_value": "no",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [
+        "rtblocks"
+      ],
+      "critical": {}
+    },
+    "rtbmblocks": {
+      "id": 17,
+      "variable": "rtbmblocks",
+      "flag": "",
+      "value_type": null,
+      "takes_value": "no",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [
+        "rtblocks"
+      ],
+      "critical": {}
+    },
+    "dsunit": {
+      "id": 18,
+      "variable": "dsunit",
+      "flag": "-d sunit",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "dswidth": {
+      "id": 19,
+      "variable": "dswidth",
+      "flag": "-d swidth",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "lsunit": {
+      "id": 20,
+      "variable": "lsunit",
+      "flag": "-l sunit",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "agsize": {
+      "id": 21,
+      "variable": "agsize",
+      "flag": "-d agsize",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "agcount": {
+      "id": 22,
+      "variable": "agcount",
+      "flag": "-d agcount",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "sb_feat": {
+      "id": 29,
+      "variable": "sb_feat",
+      "flag": "",
+      "value_type": null,
+      "takes_value": "no",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "log_version": {
+      "id": 30,
+      "variable": "log_version",
+      "flag": "-l version",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "dir_version": {
+      "id": 32,
+      "variable": "dir_version",
+      "flag": "-n version",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "projid32bit": {
+      "id": 37,
+      "variable": "projid32bit",
+      "flag": "-i projid32bit",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "finobt": {
+      "id": 40,
+      "variable": "finobt",
+      "flag": "-m finobt",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "rmapbt": {
+      "id": 42,
+      "variable": "rmapbt",
+      "flag": "-m rmapbt",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "reflink": {
+      "id": 43,
+      "variable": "reflink",
+      "flag": "-m reflink",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "bigtime": {
+      "id": 45,
+      "variable": "bigtime",
+      "flag": "-m bigtime",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "nodalign": {
+      "id": 46,
+      "variable": "nodalign",
+      "flag": "-d noalign",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "nortalign": {
+      "id": 47,
+      "variable": "nortalign",
+      "flag": "-r noalign",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "nrext64": {
+      "id": 48,
+      "variable": "nrext64",
+      "flag": "-i nrext64",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "perblock": {
+      "id": 11,
+      "variable": "inopblock",
+      "flag": "-i perblock",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "maxpct": {
+      "id": 23,
+      "variable": "imaxpct",
+      "flag": "-i maxpct",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "internal": {
+      "id": 24,
+      "variable": "loginternal",
+      "flag": "-l internal",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "agnum": {
+      "id": 26,
+      "variable": "logagno",
+      "flag": "-l agnum",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "attr": {
+      "id": 31,
+      "variable": "attr_version",
+      "flag": "-i attr",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "align": {
+      "id": 33,
+      "variable": "inode_align",
+      "flag": "-i align",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "lazy_count": {
+      "id": 35,
+      "variable": "lazy_sb_counters",
+      "flag": "-l lazy-count",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "parent": {
+      "id": 36,
+      "variable": "parent_pointers",
+      "flag": "-n parent",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "crc": {
+      "id": 38,
+      "variable": "crcs_enabled",
+      "flag": "-m crc",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "ftype": {
+      "id": 39,
+      "variable": "dirftype",
+      "flag": "-n ftype",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "sparse": {
+      "id": 41,
+      "variable": "spinodes",
+      "flag": "-i sparse",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "exchange": {
+      "id": 49,
+      "variable": "exchrange",
+      "flag": "-i exchange",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    },
+    "inobtcount": {
+      "id": 44,
+      "variable": "inobtcnt",
+      "flag": "-m inobtcount",
+      "value_type": null,
+      "takes_value": "yes",
+      "value_range_max": null,
+      "value_range_min": null,
+      "dependency": [],
+      "critical": {}
+    }
+  }
+}

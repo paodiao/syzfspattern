@@ -1,0 +1,270 @@
+{
+    "function_name": "main",
+    "superblock": "%struct.f2fs_configuration",
+    "parameters": {
+        "heap": {
+            "id": 1,
+            "variable": "@c, i32 0, i32 29",
+            "flag": "-a",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "defset_android": {
+            "id": 2,
+            "variable": "@c, i32 0, i32 46",
+            "flag": "-g",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "large_nat_bitmap": {
+            "id": 3,
+            "variable": "@c, i32 0, i32 62",
+            "flag": "-i",
+            "value_type": null,
+            "takes_value": "no",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "vol_label": {
+            "id": 4,
+            "variable": "@c, i32 0, i32 25",
+            "flag": "-l",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "zoned_mode": {
+            "id": 5,
+            "variable": "@c, i32 0, i32 3",
+            "flag": "-m",
+            "value_type": null,
+            "takes_value": "no",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": ["trim"],
+            "critical": {}
+        },
+        "overprovision": {
+            "id": 6,
+            "variable": "@c, i32 0, i32 6",
+            "flag": "-o",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "features": {
+            "id": 7,
+            "variable": "parse_feature",
+            "flag": "-O",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "fake_seed": {
+            "id": 8,
+            "variable": "@c, i32 0, i32 67",
+            "flag": "-r",
+            "value_type": null,
+            "takes_value": "no",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "root_owner": {
+            "id": 9,
+            "variable": "parse_root_owner",
+            "flag": "-R",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "segs_per_sec": {
+            "id": 10,
+            "variable": "@c, i32 0, i32 9",
+            "flag": "-s",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "device_size_sparse": {
+            "id": 11,
+            "variable": "@c, i32 0, i32 15",
+            "flag": "-S",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "secs_per_zone": {
+            "id": 12,
+            "variable": "@c, i32 0, i32 10",
+            "flag": "-z",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": ["zoned_mode"],
+            "critical": {}
+        },
+        "trim": {
+            "id": 13,
+            "variable": "@c, i32 0, i32 38",
+            "flag": "-t",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "fixed_time": {
+            "id": 14,
+            "variable": "@c, i32 0, i32 66",
+            "flag": "-T",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "vol_uuid": {
+            "id": 15,
+            "variable": "@c, i32 0, i32 26",
+            "flag": "-U",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "force_overwrite": {
+            "id": 16,
+            "variable": "force_overwrite",
+            "flag": "-f",
+            "value_type": null,
+            "takes_value": "no",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "wanted_sector_size": {
+            "id": 17,
+            "variable": "@c, i32 0, i32 18",
+            "flag": "-w",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "debug_level": {
+            "id": 18,
+            "variable": "@c, i32 0, i32 36",
+            "flag": "-d",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "encoding": {
+            "id": 19,
+            "variable": "@c, i32 0, i32 27",
+            "flag": "-C",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "encoding_flags": {
+            "id": 20,
+            "variable": "@c, i32 0, i32 28",
+            "flag": "-C",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "extension_list_cold": {
+            "id": 21,
+            "variable": "@c, i32 0, i32 34, i64 0",
+            "flag": "-e",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "extension_list_hot": {
+            "id": 22,
+            "variable": "@c, i32 0, i32 34, i64 1",
+            "flag": "-E",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        },
+        "sparse_mode": {
+            "id": 23,
+            "variable": "@c, i32 0, i32 2",
+            "flag": "",
+            "value_type": null,
+            "takes_value": "no",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": ["device_size_sparse"],
+            "critical": {}
+        },
+        "ndevs": {
+            "id": 24,
+            "variable": "@c, i32 0, i32 33",
+            "flag": "-c",
+            "value_type": null,
+            "takes_value": "yes",
+            "value_range_max": null,
+            "value_range_min": null,
+            "dependency": [],
+            "critical": {}
+        }
+    }
+}

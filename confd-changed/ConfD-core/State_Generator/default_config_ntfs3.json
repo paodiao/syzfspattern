@@ -1,0 +1,4 @@
+{
+    "sector_size": 512,
+    "cluster_size": 4096
+}

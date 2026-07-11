@@ -1,0 +1,6 @@
+{
+    "nodesize": 16384,
+    "sectorsize": 4096,
+    "csum": 0,
+    "mixed": "disable"
+}
