@@ -307,6 +307,146 @@ string getFilesystemNameString(Value *currVal) {
     return "?";
 }
 
+// ───────────────────────────────────────────────
+// strcmp-based enum chain detection for old API (f2fs match_token)
+// ───────────────────────────────────────────────
+
+static bool isStrcmpCall(CallInst* CI) {
+    Function* F = CI->getCalledFunction();
+    if (!F) return false;
+    StringRef name = F->getName();
+    return name.endswith("strcmp") || name.endswith("strncmp");
+}
+
+static std::string extractStringFromStrcmp(CallInst* strcmpCall) {
+    for (int i = 0; i < (int)strcmpCall->arg_size(); i++) {
+        Value* arg = strcmpCall->getOperand(i);
+        if (GetElementPtrInst* gep = dyn_cast<GetElementPtrInst>(arg)) {
+            if (GlobalVariable* gv = dyn_cast<GlobalVariable>(gep->getPointerOperand())) {
+                if (gv->hasInitializer()) {
+                    if (ConstantDataArray* cda = dyn_cast<ConstantDataArray>(gv->getInitializer())) {
+                        std::string s = cda->getAsString().str();
+                        if (!s.empty() && s.back() == '\0')
+                            s.pop_back();
+                        return s;
+                    }
+                }
+            }
+        }
+    }
+    return "";
+}
+
+static std::pair<int, bool> findStoreConstantToStruct(
+    BasicBlock* BB, StructType* /*targetTy unused*/,
+    std::string& outStructField, int& outEnumVal) {
+    for (auto& I : *BB) {
+        if (StoreInst* sti = dyn_cast<StoreInst>(&I)) {
+            if (ConstantInt* ci = dyn_cast<ConstantInt>(sti->getValueOperand())) {
+                Value* ptr = sti->getPointerOperand();
+                if (BitCastInst* bci = dyn_cast<BitCastInst>(ptr))
+                    ptr = bci->getOperand(0);
+                if (GetElementPtrInst* gep = dyn_cast<GetElementPtrInst>(ptr)) {
+                    Type* gepTy = gep->getPointerOperand()->getType()->getPointerElementType();
+                    if (gepTy->isStructTy() && gep->hasAllConstantIndices() && gep->getNumIndices() == 2) {
+                        ConstantInt* offCI = dyn_cast<ConstantInt>(gep->getOperand(2));
+                        if (!offCI) continue;
+                        int offset = offCI->getZExtValue();
+                        outStructField = gepTy->getStructName().str() + std::to_string(offset);
+                        outEnumVal = ci->getZExtValue();
+                        return {outEnumVal, true};
+                    }
+                }
+            }
+        }
+    }
+    return {0, false};
+}
+
+static bool isStrcmpBranch(BranchInst* bi) {
+    if (!bi->isConditional()) return false;
+    Value* cond = bi->getCondition();
+    ICmpInst* icmp = dyn_cast<ICmpInst>(cond);
+    if (!icmp || icmp->getPredicate() != ICmpInst::ICMP_EQ) return false;
+    ConstantInt* ci = nullptr;
+    Value* other = nullptr;
+    if ((ci = dyn_cast<ConstantInt>(icmp->getOperand(0)))) other = icmp->getOperand(1);
+    else if ((ci = dyn_cast<ConstantInt>(icmp->getOperand(1)))) other = icmp->getOperand(0);
+    if (!ci || !ci->isZero()) return false;
+    CallInst* call = dyn_cast<CallInst>(other);
+    return call && isStrcmpCall(call);
+}
+
+static void traceStrcmpEnumChain(
+    BranchInst* firstBr,
+    int cmd_value,
+    std::map<std::string, std::set<std::pair<std::pair<uint32_t, std::string>, std::pair<int,int>>>>& res,
+    std::map<int, std::map<int, std::string>>& enumCollect) {
+
+    BranchInst* currBr = firstBr;
+    int depth = 0;
+    const int MAX_DEPTH = 20;
+
+    while (currBr && depth < MAX_DEPTH) {
+        depth++;
+        ICmpInst* icmp = dyn_cast<ICmpInst>(currBr->getCondition());
+        if (!icmp) break;
+
+        CallInst* strcmpCall = nullptr;
+        if (isa<CallInst>(icmp->getOperand(0)))
+            strcmpCall = cast<CallInst>(icmp->getOperand(0));
+        else if (isa<CallInst>(icmp->getOperand(1)))
+            strcmpCall = cast<CallInst>(icmp->getOperand(1));
+        if (!strcmpCall) break;
+
+        std::string enumStr = extractStringFromStrcmp(strcmpCall);
+        if (enumStr.empty()) break;
+
+        BasicBlock* trueBB = currBr->getSuccessor(0);
+        BasicBlock* falseBB = currBr->getSuccessor(1);
+
+        // Heuristic: ensure trueBB is the "match" path (has store, not strcmp)
+        BranchInst* falseBr = nullptr;
+        for (auto& I : *falseBB)
+            if ((falseBr = dyn_cast<BranchInst>(&I))) break;
+        if (falseBr && isStrcmpBranch(falseBr))
+            ; // orientation OK
+        else if (falseBr && !isStrcmpBranch(falseBr)) {
+            BranchInst* trueBrCheck = nullptr;
+            for (auto& I : *trueBB)
+                if ((trueBrCheck = dyn_cast<BranchInst>(&I))) break;
+            if (isStrcmpBranch(trueBrCheck))
+                std::swap(trueBB, falseBB);
+        }
+
+        std::string fieldKey;
+        int enumVal = 0;
+        auto found = findStoreConstantToStruct(trueBB, nullptr, fieldKey, enumVal);
+        if (found.second) {
+            res[fieldKey].insert(std::make_pair(
+                std::make_pair((uint32_t)0xffffffff, std::string("assignenum")),
+                std::make_pair(cmd_value, -1)));
+            enumCollect[cmd_value][(int)enumVal] = enumStr;
+        }
+
+        BranchInst* nextBr = nullptr;
+        for (auto& I : *falseBB)
+            if ((nextBr = dyn_cast<BranchInst>(&I))) break;
+        if (nextBr && isStrcmpBranch(nextBr))
+            currBr = nextBr;
+        else
+            break;
+    }
+}
+
+static BranchInst* firstBrOfBB(BasicBlock* BB) {
+    for (auto& I : *BB) {
+        if (BranchInst* bi = dyn_cast<BranchInst>(&I))
+            return bi;
+    }
+    return nullptr;
+}
+
 GlobalVariable* FilesystemExtractorPass::getGlobalVaraible(StringRef varName)
 {
     GlobalVariable* globalVar = nullptr;
@@ -1013,12 +1153,11 @@ void FilesystemExtractorPass::HandleFsTypeStruct(GlobalVariable* globalVar, File
                     }
                     break;
                 }
-                
+                set<Function*> visited;
+                set<Function*> visited2;
+                getFileOperationsFromEntry(getTree, filesystemInfoItem, visited, 0);
+                getOldParseMountOptionsFromEntry(getTree, filesystemInfoItem, visited2, nullptr, 0);
             }
-            set<Function*> visited;
-            set<Function*> visited2;
-            getFileOperationsFromEntry(getTree, filesystemInfoItem, visited, 0);
-            getOldParseMountOptionsFromEntry(getTree, filesystemInfoItem, visited2, nullptr, 0);
         }
     }
 }
@@ -1271,8 +1410,8 @@ std::map<int, std::pair<std::string, int>> FilesystemExtractorPass::getFlagsinPa
             if(!typeFuncPtr->isNullValue()) {
                 if (auto *typeFunc = dyn_cast<Function>(typeFuncPtr)) {
                     StringRef funcName = typeFunc->getName();
-                    if (funcName.ends_with("_u32") || funcName.ends_with("_s32") ||
-                        funcName.ends_with("_u64") || funcName.ends_with("_u32oct")) {
+                    if (funcName.endswith("_u32") || funcName.endswith("_s32") ||
+                        funcName.endswith("_u64") || funcName.endswith("_u32oct")) {
                         // Detect radix: check data field for inttoptr (i64 8 to i8*)
                         int radix = 10;
                         Constant* dataField = structConst->getOperand(
@@ -1838,146 +1977,6 @@ std::map<std::string, std::set<std::pair<std::pair<uint32_t, string>, std::pair<
     return res;
 }
 
-// ───────────────────────────────────────────────
-// strcmp-based enum chain detection for old API (f2fs match_token)
-// ───────────────────────────────────────────────
-
-static bool isStrcmpCall(CallInst* CI) {
-    Function* F = CI->getCalledFunction();
-    if (!F) return false;
-    StringRef name = F->getName();
-    return name.ends_with("strcmp") || name.ends_with("strncmp");
-}
-
-static std::string extractStringFromStrcmp(CallInst* strcmpCall) {
-    for (int i = 0; i < (int)strcmpCall->arg_size(); i++) {
-        Value* arg = strcmpCall->getOperand(i);
-        if (GetElementPtrInst* gep = dyn_cast<GetElementPtrInst>(arg)) {
-            if (GlobalVariable* gv = dyn_cast<GlobalVariable>(gep->getPointerOperand())) {
-                if (gv->hasInitializer()) {
-                    if (ConstantDataArray* cda = dyn_cast<ConstantDataArray>(gv->getInitializer())) {
-                        std::string s = cda->getAsString().str();
-                        if (!s.empty() && s.back() == '\0')
-                            s.pop_back();
-                        return s;
-                    }
-                }
-            }
-        }
-    }
-    return "";
-}
-
-static std::pair<int, bool> findStoreConstantToStruct(
-    BasicBlock* BB, StructType* /*targetTy unused*/,
-    std::string& outStructField, int& outEnumVal) {
-    for (auto& I : *BB) {
-        if (StoreInst* sti = dyn_cast<StoreInst>(&I)) {
-            if (ConstantInt* ci = dyn_cast<ConstantInt>(sti->getValueOperand())) {
-                Value* ptr = sti->getPointerOperand();
-                if (BitCastInst* bci = dyn_cast<BitCastInst>(ptr))
-                    ptr = bci->getOperand(0);
-                if (GetElementPtrInst* gep = dyn_cast<GetElementPtrInst>(ptr)) {
-                    Type* gepTy = gep->getPointerOperand()->getType()->getPointerElementType();
-                    if (gepTy->isStructTy() && gep->hasAllConstantIndices() && gep->getNumIndices() == 2) {
-                        ConstantInt* offCI = dyn_cast<ConstantInt>(gep->getOperand(2));
-                        if (!offCI) continue;
-                        int offset = offCI->getZExtValue();
-                        outStructField = gepTy->getStructName().str() + std::to_string(offset);
-                        outEnumVal = ci->getZExtValue();
-                        return {outEnumVal, true};
-                    }
-                }
-            }
-        }
-    }
-    return {0, false};
-}
-
-static bool isStrcmpBranch(BranchInst* bi) {
-    if (!bi->isConditional()) return false;
-    Value* cond = bi->getCondition();
-    ICmpInst* icmp = dyn_cast<ICmpInst>(cond);
-    if (!icmp || icmp->getPredicate() != ICmpInst::ICMP_EQ) return false;
-    ConstantInt* ci = nullptr;
-    Value* other = nullptr;
-    if ((ci = dyn_cast<ConstantInt>(icmp->getOperand(0)))) other = icmp->getOperand(1);
-    else if ((ci = dyn_cast<ConstantInt>(icmp->getOperand(1)))) other = icmp->getOperand(0);
-    if (!ci || !ci->isZero()) return false;
-    CallInst* call = dyn_cast<CallInst>(other);
-    return call && isStrcmpCall(call);
-}
-
-static void traceStrcmpEnumChain(
-    BranchInst* firstBr,
-    int cmd_value,
-    std::map<std::string, std::set<std::pair<std::pair<uint32_t, std::string>, std::pair<int,int>>>>& res,
-    std::map<int, std::map<int, std::string>>& enumCollect) {
-
-    BranchInst* currBr = firstBr;
-    int depth = 0;
-    const int MAX_DEPTH = 20;
-
-    while (currBr && depth < MAX_DEPTH) {
-        depth++;
-        ICmpInst* icmp = dyn_cast<ICmpInst>(currBr->getCondition());
-        if (!icmp) break;
-
-        CallInst* strcmpCall = nullptr;
-        if (isa<CallInst>(icmp->getOperand(0)))
-            strcmpCall = cast<CallInst>(icmp->getOperand(0));
-        else if (isa<CallInst>(icmp->getOperand(1)))
-            strcmpCall = cast<CallInst>(icmp->getOperand(1));
-        if (!strcmpCall) break;
-
-        std::string enumStr = extractStringFromStrcmp(strcmpCall);
-        if (enumStr.empty()) break;
-
-        BasicBlock* trueBB = currBr->getSuccessor(0);
-        BasicBlock* falseBB = currBr->getSuccessor(1);
-
-        // Heuristic: ensure trueBB is the "match" path (has store, not strcmp)
-        BranchInst* falseBr = nullptr;
-        for (auto& I : *falseBB)
-            if ((falseBr = dyn_cast<BranchInst>(&I))) break;
-        if (falseBr && isStrcmpBranch(falseBr))
-            ; // orientation OK
-        else if (falseBr && !isStrcmpBranch(falseBr)) {
-            BranchInst* trueBrCheck = nullptr;
-            for (auto& I : *trueBB)
-                if ((trueBrCheck = dyn_cast<BranchInst>(&I))) break;
-            if (isStrcmpBranch(trueBrCheck))
-                std::swap(trueBB, falseBB);
-        }
-
-        std::string fieldKey;
-        int enumVal = 0;
-        auto found = findStoreConstantToStruct(trueBB, nullptr, fieldKey, enumVal);
-        if (found.second) {
-            res[fieldKey].insert(std::make_pair(
-                std::make_pair((uint32_t)0xffffffff, std::string("assignenum")),
-                std::make_pair(cmd_value, -1)));
-            enumCollect[cmd_value][(int)enumVal] = enumStr;
-        }
-
-        BranchInst* nextBr = nullptr;
-        for (auto& I : *falseBB)
-            if ((nextBr = dyn_cast<BranchInst>(&I))) break;
-        if (nextBr && isStrcmpBranch(nextBr))
-            currBr = nextBr;
-        else
-            break;
-    }
-}
-
-static BranchInst* firstBrOfBB(BasicBlock* BB) {
-    for (auto& I : *BB) {
-        if (BranchInst* bi = dyn_cast<BranchInst>(&I))
-            return bi;
-    }
-    return nullptr;
-}
-
 void trygetmountoptfieldid(Function* CF, string srcFileName, string& flagst, bool isopt1) {
     for(inst_iterator iter = inst_begin(CF); iter != inst_end(CF); iter++)
     {
@@ -2027,7 +2026,7 @@ void trygetmountoptfieldid(Function* CF, string srcFileName, string& flagst, boo
 // Helper: get byte offset of a field in struct.ext4_fs_context using LLVM StructLayout
 // First tries debug info (kernel compiled with -g), falls back to hardcoded index table
 static int getExt4FsContextFieldOffset(Module* M, const std::string& fieldName) {
-    StructType* fcTy = M->getTypeByName("struct.ext4_fs_context");
+    StructType* fcTy = StructType::getTypeByName(M->getContext(), "struct.ext4_fs_context");
     if (!fcTy) return -1;
     const DataLayout& DL = M->getDataLayout();
     const StructLayout* layout = DL.getStructLayout(fcTy);
@@ -2036,6 +2035,8 @@ static int getExt4FsContextFieldOffset(Module* M, const std::string& fieldName) 
     // Note: requires kernel compiled with -g -fno-eliminate-unused-debug-types
     // for DICompositeType to appear in CU's retainedTypes
     if (NamedMDNode* CU_Nodes = M->getNamedMetadata("llvm.dbg.cu")) {
+        DebugInfoFinder DIFinder;
+        DIFinder.processModule(*M);
         for (auto* CUNode : CU_Nodes->operands()) {
             DICompileUnit* CU = dyn_cast<DICompileUnit>(CUNode);
             if (!CU) continue;
@@ -2055,7 +2056,8 @@ static int getExt4FsContextFieldOffset(Module* M, const std::string& fieldName) 
             }
             // Also search subprogram local variables: the type may only be
             // referenced via a local variable, not in retainedTypes.
-            for (auto* SP : CU->getSubprograms()) {
+            for (auto* SP : DIFinder.subprograms()) {
+                if (SP->getUnit() != CU) continue;
                 for (auto* Node : SP->getRetainedNodes()) {
                     DILocalVariable* LV = dyn_cast<DILocalVariable>(Node);
                     if (!LV) continue;
@@ -2102,7 +2104,7 @@ static int getExt4FsContextFieldOffset(Module* M, const std::string& fieldName) 
     return -1;
 }
 
-std::map<std::string, std::set<std::pair<std::pair<uint32_t, string>, std::pair<int,int>>>> FilesystemExtractorPass::collectExt4ParamParse(Module* Ext4Super, std::set<string>& relatedSt, GlobalVariable* paramSpecs, bool isnew) {
+std::map<std::string, std::set<std::pair<std::pair<uint32_t, string>, std::pair<int,int>>>> FilesystemExtractorPass::collectExt4ParamParse(Module* Ext4Super, std::set<string>& relatedSt) {
     std::map<std::string, std::set<std::pair<std::pair<uint32_t, string>, std::pair<int,int>>>> res;
     GlobalVariable* ext4MountOptConsts = nullptr;
     string smountopt1 = "";
@@ -2158,20 +2160,49 @@ std::map<std::string, std::set<std::pair<std::pair<uint32_t, string>, std::pair<
         return res;
     }
     
+    // Phase 3: find ext4_param_specs[] (new kernel) or tokens[] (old kernel)
+    // and build optIdToName (optid → option name) from its entries.
+    // Auto-detect kernel version by struct type, not by caller flag.
     map<int, string> optIdToName;
-    if (paramSpecs && paramSpecs->hasInitializer()) {
-        auto* arr = dyn_cast<ConstantArray>(paramSpecs->getInitializer());
+    GlobalVariable* foundParamSpecs = nullptr;
+    bool isnew = false;
+
+    for (Module::global_iterator gi = Ext4Super->global_begin();
+         gi != Ext4Super->global_end(); ++gi) {
+        GlobalVariable* GV = &*gi;
+        if (!GV || !GV->getValueType()->isArrayTy()) continue;
+        if (!GV->isConstant() || !GV->hasInitializer()) continue;
+
+        auto* arrTy = GV->getValueType();
+        auto* elemTy = arrTy->getArrayElementType();
+        if (!elemTy->isStructTy()) continue;
+
+        string stName = elemTy->getStructName().str();
+        if (stName == "struct.fs_parameter_spec") {
+            foundParamSpecs = GV;
+            isnew = true;
+            break;
+        }
+        if (stName == "struct.match_token") {
+            foundParamSpecs = GV;
+            isnew = false;
+            break;
+        }
+    }
+
+    if (foundParamSpecs && foundParamSpecs->hasInitializer()) {
+        auto* arr = dyn_cast<ConstantArray>(foundParamSpecs->getInitializer());
         if (arr) {
             for (unsigned i = 0; i < arr->getNumOperands(); ++i) {
                 auto* st = dyn_cast<ConstantStruct>(arr->getAggregateElement(i));
                 if (!st) continue;
-            
+
                 int optValue = -1;
                 string name;
-            
+
                 if (isnew) {
-                    name = getFilesystemNameString(st->getOperand(0));      // field 0
-                    auto* ci = dyn_cast<ConstantInt>(st->getOperand(2));    // field 2
+                    name = getFilesystemNameString(st->getOperand(0));
+                    auto* ci = dyn_cast<ConstantInt>(st->getOperand(2));
                     if (ci) optValue = ci->getZExtValue();
                 } else {
                     name = getFilesystemNameString(
@@ -2182,12 +2213,13 @@ std::map<std::string, std::set<std::pair<std::pair<uint32_t, string>, std::pair<
                     size_t eq = name.find('=');
                     if (eq != string::npos) name = name.substr(0, eq);
                 }
-            
+
                 if (name == "?" || name.empty() || optValue == -1) continue;
                 optIdToName[optValue] = name;
             }
         }
     }
+
     if(auto *arrayConst = dyn_cast<ConstantArray>(fsparaminit))
     {   relatedSt.insert("struct.ext4_sb_info");
         for (unsigned i = 0; i < arrayConst->getNumOperands(); ++i)
@@ -4116,7 +4148,7 @@ std::map<std::string, std::set<string>> FilesystemExtractorPass::collectFunction
 																			                    string op = "";
 																			                    if (cmpopandv.first != "") {
 																				                    if(isno) op = comparisonOpposites[cmpopandv.first]; else op = cmpopandv.first;
-																				                    fsMountConstraintIf.insert(std::make_pair(intname, op + std::to_string(cmpopandv.first)));
+																				                    fsMountConstraintIf.insert(std::make_pair(intname, op + std::to_string(cmpopandv.second)));
 																			                    } else {
 																				                    if(isno) op = "!="; else op = "=";
 																				                    fsMountConstraintIf.insert(std::make_pair(intname, op + std::to_string(andv)));
@@ -4213,7 +4245,7 @@ std::map<std::string, std::set<string>> FilesystemExtractorPass::collectFunction
                                                                 if(MaybeBitField) {
                                                                     itrunctost = itrunctost + ":" + std::to_string(BitFieldOff);
                                                                 }
-                                                                OneLayerVal currStAndConst;
+                                                                std::pair<std::pair<std::string, std::pair<uint32_t, std::string>>, std::pair<std::string, uint64_t>> currStAndConst;
                                                                 if(isno) {
                                                                     if(MaybeBitField) {
                                                                         currStAndConst = std::make_pair(std::make_pair(itrunctost, std::make_pair((uint32_t)BitFieldOff, "bitfieldclear")), std::make_pair(std::string(""), (uint64_t)0));
@@ -4300,6 +4332,7 @@ std::map<std::string, std::set<string>> FilesystemExtractorPass::collectFunction
                                                                             string optSt = innerP.first;
                                                                             uint32_t setOptConst = ConstConf.first;
                                                                             string setOptStr = ConstConf.second;
+                                                                            std::pair<std::string, uint64_t> cmpopandv = OptStConstconf.second;
                                                                             std::set<std::pair<std::pair<uint32_t, string>, std::pair<int, int>>> constandfe = sigfs2options[optSt];
                                                                             for(auto& constfeandconf : constandfe) {
                                                                                 std::pair<uint32_t, string> constfe = constfeandconf.first;
@@ -4329,7 +4362,7 @@ std::map<std::string, std::set<string>> FilesystemExtractorPass::collectFunction
 																                        string op = "";
 																                        if (cmpopandv.first != "") {
 																	                        if(isno) op = comparisonOpposites[cmpopandv.first]; else op = cmpopandv.first;
-																	                        fsMountConstraintIf.insert(std::make_pair(intname, op + std::to_string(cmpopandv.first)));
+																	                        fsMountConstraintIf.insert(std::make_pair(intname, op + std::to_string(cmpopandv.second)));
 																                        }
 																                        continue;
 															                        }
@@ -5727,7 +5760,7 @@ bool FilesystemExtractorPass::doModulePass(Module* M)
                                         //记录一下这个东西代表什么，string就是结构体类型名称和字段序号构成的字符串，uint32_t就是用于设置flag的常量值，跟它在一起的字符串只会是"set"或"clear"或"enumset"或"enumclear"或"assign*"，两个int，第一个int是该选项本身的枚举值，第二个int，当uint32_t对该enum选项可以解析出值时，该值为在enum数组中的对应值，否则为-1，对普通flag选项，也为-1，对noflag，为-2，对yesflag，为-3，对老版本的基于match_token的解析，对于它的flag，记为-4，对assignint，记为-5
                                         std::map<std::string, std::set<std::pair<std::pair<uint32_t, string>, std::pair<int, int>>>> collectParamsParseRes;
                                         if(filesystemInfoItem->name == "ext4") {
-                                            collectParamsParseRes = collectExt4ParamParse(parseParamsFunc->getParent(), relatedSt, parseParamsFunc, true);
+                                            collectParamsParseRes = collectExt4ParamParse(parseParamsFunc->getParent(), relatedSt);
                                         } else {
                                             collectParamsParseRes = collectParamsParse(parseParamsFunc, enumcollectres, flagcollectres, intcollectres, relatedSt);
                                         }
@@ -5830,7 +5863,7 @@ bool FilesystemExtractorPass::doModulePass(Module* M)
                                 std::map<int, std::pair<std::string, int>> intcollectres;
                                 std::map<int, std::string> enumcollectres;
                                 for(GlobalVariable* fsp : fsParamsArrays) {
-                                    std::map<int, std::string> tmpintcollectres;
+                                    std::map<int, std::pair<std::string, int>> tmpintcollectres;
                                     //std::map<std::pair<int, std::string>, std::map<int, std::string>> tmpenumcollectres;
                                     std::map<int, std::string> tmpflagcollectres = getPotentialFlagsinOldParams(fsp, tmpintcollectres, enumcollectres);
                                     for(auto &mflag : tmpflagcollectres) {
@@ -5865,7 +5898,7 @@ bool FilesystemExtractorPass::doModulePass(Module* M)
                                 //记录一下这个东西代表什么，string就是结构体类型名称和字段序号构成的字符串，uint32_t就是用于设置flag的常量值，跟它在一起的字符串只会是"set"或"clear"或"enumset"或"enumclear"或"assign*"，两个int，第一个int是该选项本身的枚举值，第二个int，当uint32_t对该enum选项可以解析出值时，该值为在enum数组中的对应值，否则为-1，对普通flag选项，也为-1，对noflag，为-2，对yesflag，为-3，对老版本的基于match_token的解析，对于它的flag，记为-4，对assignint，记为-5
                                 std::map<std::string, std::set<std::pair<std::pair<uint32_t, string>, std::pair<int, int>>>> collectParamsParseRes;
                                 if(filesystemInfoItem->name == "ext4") {
-                                    collectParamsParseRes = collectExt4ParamParse(OldParseF->getParent(), relatedSt, OldParseF, false);
+                                    collectParamsParseRes = collectExt4ParamParse(OldParseF->getParent(), relatedSt);
                                 } else {
                                     std::map<int, std::map<int, std::string>> enumCollect;
                                     collectParamsParseRes = collectOldParamsParse(OldParseF, CallToOldParseF, flagcollectres, intcollectres, enumcollectres, relatedSt, enumCollect);
@@ -5935,7 +5968,7 @@ bool FilesystemExtractorPass::doModulePass(Module* M)
                                  MountOptDependencyExtractor l2ext(Ctx);
                                 l2ext.extract(filesystemInfoItem->name, OldParseF, relatedSt,
                                     Ctx->fs2options[filesystemInfoItem->name], Ctx->fs2options2onelayer[filesystemInfoItem->name],
-                                    l2flagParams, intcollectres, enumcollectres);
+                                    l2flagParams, intcollectres, Ctx->fsparamsenum[filesystemInfoItem->name]);
                             } 
                         }
                     }

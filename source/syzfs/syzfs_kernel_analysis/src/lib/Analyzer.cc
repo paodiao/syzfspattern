@@ -1036,7 +1036,7 @@ void TryMatchCallInIf(CallInst* ifCall, std::map<std::pair<int, std::string>, st
 									string op = "";
 									if (cmpopandv.first != "") {
 										if(isno) op = comparisonOpposites[cmpopandv.first]; else op = cmpopandv.first;
-										pathConstraints.insert(std::make_pair(intname, op + std::to_string(cmpopandv.first)));
+										pathConstraints.insert(std::make_pair(intname, op + std::to_string(cmpopandv.second)));
 									} else {
 										if(isno) op = "!="; else op = "=";
 										pathConstraints.insert(std::make_pair(intname, op + std::to_string(flagcollect)));
@@ -1297,8 +1297,8 @@ void findFsConstFromIf(vector<set<pair<string, string>>> &fsMountConstraintGroup
 								}
 								for(Instruction* pendinst2 : pendinsts2) {
 									ICmpi = pendinst2;
-									MaybeBitField = false;
-									BitFieldOff = 0;
+									bool MaybeBitField = false;
+									int BitFieldOff = 0;
 									if(ICmpi->getOpcode() == llvm::Instruction::ZExt) {
 										OP << "find bit field zext " <<*ICmpi << "\n";
 										ICmpi = dyn_cast<Instruction>(ICmpi->getOperand(0));
@@ -1472,7 +1472,7 @@ void findFsConstFromIf(vector<set<pair<string, string>>> &fsMountConstraintGroup
 																			string op = "";
 																			if (cmpopandv.first != "") {
 																				if(isno) op = comparisonOpposites[cmpopandv.first]; else op = cmpopandv.first;
-																				pathConstraints.insert(std::make_pair(intname, op + std::to_string(cmpopandv.first)));
+																				pathConstraints.insert(std::make_pair(intname, op + std::to_string(cmpopandv.second)));
 																			} else {
 																				if(isno) op = "!="; else op = "=";
 																				pathConstraints.insert(std::make_pair(intname, op + std::to_string(andv)));
@@ -1531,7 +1531,7 @@ void findFsConstFromIf(vector<set<pair<string, string>>> &fsMountConstraintGroup
 									} else if (ICmpi->getOpcode() == llvm::Instruction::Load && !MaybeBitField) {
 										LoadInst* ldi = nullptr;
 										GetElementPtrInst* gepi = nullptr;
-										ldi = dyn_cast<LoadInst>(andi);
+										ldi = dyn_cast<LoadInst>(ICmpi);
 										llvm::Value* ldpo = ldi->getPointerOperand();
 										Instruction* ldpoi = dyn_cast<Instruction>(ldpo);
 										if(!ldpoi) continue;
@@ -1858,7 +1858,7 @@ void findFsConstFromIf(vector<set<pair<string, string>>> &fsMountConstraintGroup
 																string op = "";
 																if (cmpopandv.first != "") {
 																	if(isno) op = comparisonOpposites[cmpopandv.first]; else op = cmpopandv.first;
-																	pathConstraints.insert(std::make_pair(intname, op + std::to_string(cmpopandv.first)));
+																	pathConstraints.insert(std::make_pair(intname, op + std::to_string(cmpopandv.second)));
 																}
 																continue;
 															}
@@ -2499,7 +2499,7 @@ int main(int argc, char **argv) {
 	clock_t begin = clock();
 	llvm_shutdown_obj Y;  // Call llvm_shutdown() on exit.
 
-	cl::ParseCommandLineOptions(argc, argv, "syzfs: kernel global analysis\n");
+	cl::ParseCommandLineOptions(argc, argv, "Syzdirect: kernel global analysis\n");
 	SMDiagnostic Err;
 
 	// full file path -> Module class

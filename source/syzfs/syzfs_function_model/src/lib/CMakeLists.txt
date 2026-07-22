@@ -21,6 +21,8 @@ set (AnalyzerSourceCodes
 	NetworkInterfaceExtractor.h
 	FilesystemExtractor.cc
 	FilesystemExtractor.h
+	MountOptDependencyExtractor.cc
+	MountOptDependencyExtractor.h
 	CallGraphSearch.cc
 	CallGraphSearch.h
 	DbgInfoHelper.cc
